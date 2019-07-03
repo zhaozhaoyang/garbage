@@ -4,7 +4,7 @@
         <div class="box">
             <div class="sec1">
                 <p class="font1">您的建议</p>
-                <textarea class="board" name="" id="" cols="30" rows="10" placeholder="请描述你的问题">
+                <textarea class="board" name="" id="" cols="30" rows="10" placeholder="请描述你的问题" v-model="content">
 
                 </textarea>
             </div>
@@ -20,13 +20,22 @@ export default {
     components:{myheader},
     data() {
 		return {			
-            value:"阿里科技时代"
+            uid:this.$store.state.uid || window.sessionStorage.getItem("uid"),
+            content:""
 		}
+    },
+    created(){
+        
     },
     methods:{
         doIt(){
-            Toast.success('提交成功');
-            this.$router.push('/my')
+            this.postRequest({"cmd":"subFeedback",uid:this.uid,content:this.content})
+            .then(res =>{
+                console.log(res)
+                Toast.success('提交成功');
+                this.$router.push('/my')
+            })
+            
         }
     }
 }

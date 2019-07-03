@@ -32,15 +32,17 @@ export default {
 		return {
             uid:this.$store.state.uid || window.sessionStorage.getItem("uid"),
             list:[],
-            totalPage:"" //总页数
+            totalPage:"" ,//总页数
+            nowPage: 1,
+            pageCount:10
 		}
     },
     created(){
-        this.getList()
+        this.getList(1)
     },
     methods:{
-        getList(){
-            var data = {"cmd":"farmerlist","uid":this.uid}
+        getList(num){
+            var data = {"cmd":"farmerlist","uid":this.uid,"nowPage":num,"pageCount":this.pageCount}
             this.postRequest(data)
             .then(res =>{
                 console.log(res)                

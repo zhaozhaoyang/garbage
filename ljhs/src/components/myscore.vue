@@ -2,12 +2,12 @@
     <div class="c1">
         <myheader tit="我的评分" showL="true"></myheader>
         <ul class="list">
-            <li v-for="i in 20">
+            <li v-for="(item,index) in list" :key="index">
                 <div class="b1">
                     <img src="@/assets/images/touxiang.png" alt="">
                 </div>
                 <div class="b2">
-                    <div class="men">张三</div>
+                    <div class="men">{{item.name}}</div>
                     <div class="phone">联系方式：15518789654</div>
                 </div>
                 <div class="b3 color6">
@@ -24,8 +24,21 @@ export default {
     components:{myheader},
     data() {
 		return {
-			
+            uid:this.$store.state.uid || window.sessionStorage.getItem("uid"),
+            list:[],
+            nowPage:1,
+            pageCount:10
 		}
+    },
+    created(){
+        this.postRequest({"cmd":"myScoreList",'uid':this.uid,nowPage:this.nowPage,pageCount:this.pageCount})
+        .then(res =>{
+            if(res.data.dataList){
+                this.list = res.data.dataList
+                console.log(res)
+            }
+           
+        })
     },
     methods:{
         

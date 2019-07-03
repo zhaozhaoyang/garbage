@@ -2,13 +2,13 @@
     <div class="c1">
         <myheader tit="消息" showL="true"></myheader>
         <ul class="list">
-            <li class="flex" v-for="i in 10">
+            <li class="flex" v-for="(item,index) in list" :key="index">
                 <div class="lf">
-                    <span class="font1 sp1">系统消息</span>
-                    <span class="font2">系统消息</span>
+                    <span class="font1 sp1">{{item.title}}</span>
+                    <span class="font2">{{item.content}}</span>
                 </div>
                 <div class="rt color9 font2">
-                    2019-6-1  15：20：12
+                  {{item.adtime}}
                 </div>
             </li>
 
@@ -20,11 +20,28 @@ import myheader  from './component/header.vue'
 export default {
     components:{myheader},
     data() {
-		return {			
+		return {	
+            list:[],
+            uid:this.$store.state.uid || window.sessionStorage.getItem("uid"),
+            nowPage:1,
+            pageCount:10
+
 		}
     },
+    created(){
+        this.getList()
+    },
     methods:{
-        
+        getList(){
+            this.postRequest({"cmd":"messagelist",'uid':this.uid,nowPage:this.nowPage,pageCount:this.pageCount})
+            .then(res =>{
+                console.log(res)
+                if(res.data.dataList){
+                    
+                    this.list = res.data.dataList
+                }
+            })
+        },
     }
 }
 </script>

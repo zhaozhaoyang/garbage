@@ -45,11 +45,25 @@ export default {
     components:{btmbar,Bscroll},
 	data() {
 		return {
+            uid:this.$store.state.uid || window.sessionStorage.getItem("uid"),
 			codeUrl: '',
             showsao:false,
             active:0,
-            actnum:1
+            actnum:1,
+
+            type:"", // 0总排行 1日排行 2月排行 3年排行
+            nowPage:1,
+            pageCount:10,
+            list:[],
+            totalPage:""
 		}
+    },
+    created(){
+        this.postRequest({"cmd":"scoreSort",'uid':this.uid,type:0,nowPage:this.nowPage,pageCount:this.pageCount})
+        .then(res =>{
+            this.list  = res.data.dataList
+            console.log(res)
+        })
     },
     mounted(){
         this.$nextTick(() => {

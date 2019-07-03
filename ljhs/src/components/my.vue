@@ -9,7 +9,7 @@
             </div>           
             
             <div class="name">
-               <span class="f1">溟濛木有枝</span>
+               <span class="f1">{{dataObject.nickname}}</span>
                 <span @click="goEdit">
                     <!-- <van-icon name="edit" size="18"/> -->
                     <img src="@/assets/images/edit.jpg" class="edit">
@@ -26,20 +26,34 @@
 <script>
 import btmbar  from './component/btmbar.vue'
 import myheader  from './component/header.vue'
+import { Toast } from 'vant';
 export default {
     components:{btmbar,myheader},
     data() {
         return{
+            uid:this.$store.state.uid || window.sessionStorage.getItem("uid"),
             nobder:false,
-            actnum:2
+            actnum:2,
+            dataObject:""
         }
+    },
+    created(){
+        this.postRequest({"cmd":"userInfo",'uid':this.uid})
+        .then(res =>{
+            this.dataObject  = res.data.dataObject
+            // console.log(res)
+        })
     },
     methods:{
         goEdit(){
-            this.$router.push('/changeNick')
+            this.$router.push({path: '/changeNick?name=' + this.dataObject.nickname});
         },
         editFace(){
-            
+            this.postRequest({"cmd":"saveIcon",'uid':this.uid,icon:""})
+            .then(res =>{
+                console.log(res)
+                Toast('修改成功！');	
+            })
         }
     }
 }

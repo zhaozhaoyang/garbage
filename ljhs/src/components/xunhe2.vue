@@ -98,7 +98,6 @@ export default {
         questions(){
             this.postRequest({"cmd":"questionList"})
             .then(res =>{
-                console.log(res)
                 if(res.data.dataList){
                     for(let i in res.data.dataList){
                         res.data.dataList[i].show = true

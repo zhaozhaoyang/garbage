@@ -16,13 +16,23 @@ export default {
     components:{myheader},
     data() {
 		return {			
-            value:"阿里科技时代"
+            value:"",
+            uid:this.$store.state.uid || window.sessionStorage.getItem("uid")
+            
 		}
+    },
+    created(){
+        this.value = this.$route.query.name
     },
     methods:{
         doIt(){
-            Toast.success('提交成功');
-            this.$router.push('/my')
+            this.postRequest({"cmd":"saveNickname",'uid':this.uid,nickname:this.value})
+            .then(res =>{
+                // console.log(res)
+                Toast.success('修改成功！');
+                this.$router.push('/my')
+            })           
+            
         }
     }
 }
