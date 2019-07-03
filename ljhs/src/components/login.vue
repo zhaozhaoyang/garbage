@@ -1,0 +1,78 @@
+<template>
+	<div class="contain">
+		<div class="d1">
+			<div @click="yklogo">游客登录</div>
+		</div>
+		<div class="logo">
+			<img src="../assets/images/touxiang.png" alt="">
+		</div>
+		<ul class="d2">
+			<li>
+				<span>账号：</span>
+				<input type="text" class="t1" placeholder="输入账号">
+			</li>
+			<li>
+				<span>密码：</span>
+				<input type="password" class="t1" placeholder="输入密码">
+			</li>			
+		</ul>
+		<input type="button" class="btn" value="确认登录"  @click="logo">
+	</div>
+</template>
+
+<script>
+	import Request from '@util/request'
+	import { Toast,Button } from 'vant'
+
+	export default {
+		data() {
+			return {
+				tel: '',
+				password: '',
+				all: {}
+			}
+		},
+		mounted() {
+			
+		},
+		components: {
+			Toast
+		},
+		methods: {
+			yklogo(){
+				this.$router.push('index')
+			},
+			logo(){
+				if(true){
+					// this.postRequest('/api/member/member/login',{memberType:'0',account:'19903888908',password:'123321'})
+					// .then(res =>{
+					// 	console.log(res)
+					// })
+					this.postRequest('api/member/member/logout',{},'get')
+					.then(res =>{
+						console.log(res)
+					})
+				}else{
+					this.$router.push('index')
+				}
+			}
+		}
+	}
+</script>
+
+<style scoped="scoped">
+	.contain{width: 100%;box-sizing: border-box;height: 100vh;}
+	.d1{width: 100%;display: flex;flex-flow: row;justify-content: flex-end;padding: .4rem .3rem 0;}
+	.d1 div{width: 1.97rem;height: .8rem;background: #eee;font-size: .35rem;line-height: .8rem;border-radius: .33rem;text-align: center;cursor: pointer;}
+	.logo{width: 100%;display: flex;justify-content: center;margin-top: 1rem;}
+	.logo img{width: 3rem;height: 3rem;}
+	.d2{width: 100%;margin-top: 1.5rem;}
+	.d2 li{width:8.34rem; height: 1.17rem;border-radius: .586rem;margin: .45rem auto 0;background: #fff;line-height: 1.17rem;padding-left: .5rem;box-sizing: border-box;display: flex;flex-flow: row;align-content: center;}
+	.d2 span{font-size: .4rem;color: #333;}
+	.t1{width: 5rem;height: 99%;background: transparent;font-size: .374rem;margin-left: .5rem;}
+	/* .btn{display: block;width: 2.5rem;height: .63rem;line-height: .63rem;text-align: center;border-radius: .3rem;margin: 0 auto;margin-top: .9rem;font-size: .3rem;
+	background: linear-gradient(180deg,rgba(115, 200, 255, 1), rgba(49, 146, 255, 1));box-shadow: 0px 10px 24px 0px rgba(55, 151, 255, 0.3); color: #fff;} */
+	.btn{display: block;width: 4.56rem;height: 1.17rem;line-height: .63rem;text-align: center;border-radius:.586rem;margin: 0 auto;margin-top: .9rem;font-size: .43rem;
+	background:#157FCA; color: #fff;}
+
+</style>
