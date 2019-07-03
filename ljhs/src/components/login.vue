@@ -9,11 +9,11 @@
 		<ul class="d2">
 			<li>
 				<span>账号：</span>
-				<input type="text" class="t1" placeholder="输入账号">
+				<input type="text" class="t1" placeholder="输入账号" v-model="name">
 			</li>
 			<li>
 				<span>密码：</span>
-				<input type="password" class="t1" placeholder="输入密码">
+				<input type="password" class="t1" placeholder="输入密码" v-model="password">
 			</li>			
 		</ul>
 		<input type="button" class="btn" value="确认登录"  @click="logo">
@@ -21,15 +21,13 @@
 </template>
 
 <script>
-	import Request from '@util/request'
-	import { Toast,Button } from 'vant'
-
+	import { Toast,Button ,Notify} from 'vant'
 	export default {
 		data() {
 			return {
-				tel: '',
+				name: '',
 				password: '',
-				all: {}
+				token:""
 			}
 		},
 		mounted() {
@@ -43,18 +41,23 @@
 				this.$router.push('index')
 			},
 			logo(){
-				if(true){
-					// this.postRequest('/api/member/member/login',{memberType:'0',account:'19903888908',password:'123321'})
-					// .then(res =>{
-					// 	console.log(res)
-					// })
-					this.postRequest('api/member/member/logout',{},'get')
-					.then(res =>{
-						console.log(res)
-					})
-				}else{
-					this.$router.push('index')
+				if(this.name == '' || this.password==''){
+					Toast('用户名或密码不能为空！');	
+					return;			
 				}
+				this.postRequest({"cmd":"login","name":this.name,"password":this.password,"token":""})
+				.then(res =>{
+					console.log(res)
+					Notify({
+						message: '登陆成功！',
+						duration: 1000,
+						background: '#07c160'
+					});
+					window.sessionStorage.setItem("uid",res.data.uid);
+					this.$store.commit("setuid",res.data.uid);
+					this.$router.push('index')
+				})				
+				
 			}
 		}
 	}

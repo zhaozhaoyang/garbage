@@ -2,19 +2,25 @@
     <div class="c1">
         <myheader tit="农户列表" showL="true"></myheader>
         <ul class="list">
-            <li v-for="i in 20">
+            <li v-for="(item,index) in list" :key="index">
                 <div class="b1">
                     <img src="@/assets/images/touxiang.png" alt="">
                 </div>
                 <div class="b2">
-                    <div class="men">张三</div>
-                    <div class="phone">联系方式：15518789654</div>
-                </div>
-                <div class="b3 color6">
-                    <div class="tm">2019-6-1 15:30:12</div>
-                    <div class="blong">所属村：裤脚村 | 所属组：3组</div>
-                </div>
+                    <div class="tm">{{item.adtime}}</div>
+                    <div class="bb2">
+                        <div class="men">{{item.name}}</div>
+                        <div class="blong">所属村：{{item.vname}}</div>
+                    </div>               
+                    <div class="b3 color6">
+                        <div class="phone">联系方式：{{item.phone}}</div>                    
+                        <div class="color6">所属组：{{item.gname}}</div>
+                    </div>
+                </div>                
             </li>
+        </ul>
+        <ul class="list" v-if="list.length==0" >
+           <li style="text-align:center;">暂无数据...</li> 
         </ul>
     </div>
 </template>
@@ -24,11 +30,26 @@ export default {
     components:{myheader},
     data() {
 		return {
-			
+            uid:this.$store.state.uid || window.sessionStorage.getItem("uid"),
+            list:[],
+            totalPage:"" //总页数
 		}
     },
+    created(){
+        this.getList()
+    },
     methods:{
-        
+        getList(){
+            var data = {"cmd":"farmerlist","uid":this.uid}
+            this.postRequest(data)
+            .then(res =>{
+                console.log(res)                
+                if(res.data.dataList){
+                    this.list = res.data.dataList
+                    this.totalPage = res.data.totalPage
+                }
+            })
+        }
     }
 }
 </script>
@@ -42,7 +63,7 @@ export default {
     display: flex;
     flex-flow: row;
     border-bottom:1px solid #f7f7f7;
-    height: 1.9rem;
+    height: 2.0rem;
     align-items: center;
     box-sizing: border-box;
 }
@@ -53,10 +74,26 @@ export default {
     width: 20%;
     text-align: center;
 }
-.b2,.b3{width: 40%;}
 .b1 img{height: 45px;width: 45px;border-radius: 50%;}
-.men{font-size:16px;color: #111;font-weight: bold;margin-bottom: .28rem;}
+.b2{
+    width: 77%; 
+}
+.tm{font-size: 12px;letter-spacing: 2px;text-align: right;}
+.bb2,.b3{
+    display: flex;flex-flow: row;justify-content: space-between;
+}
+.bb2{height: 30px;}
+.men{font-size:16px;color: #111;font-weight: bold;}
 .phone{font-size:13px;color: #999;}
-.tm{font-size: 12px;margin-bottom: .33rem;letter-spacing: 2px;}
+
+.b3{font-size: 13px;text-align: right;}
+.blong{color: #999;line-height: 30px;}
+/* .b2,.b3{width: 40%;}
+.b3{display: flex;flex-flow: column;}
+.b1 img{height: 45px;width: 45px;border-radius: 50%;}
+.men{font-size:16px;color: #111;font-weight: bold;margin-bottom: 15px;}
+.phone{font-size:13px;color: #999;}
+.tm{font-size: 12px;margin-bottom: 8px;letter-spacing: 2px;text-align: right;}
 .b3{font-size: 13px;text-align: right;padding-right: 10px;}
+.blong{margin-top: 8px;} */
 </style>

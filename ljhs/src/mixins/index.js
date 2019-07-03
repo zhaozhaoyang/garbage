@@ -1,13 +1,13 @@
 import axios from 'axios'
-
+import { Toast } from 'vant';
 // 环境的切换
-if (process.env.NODE_ENV == 'development') {
-	axios.defaults.baseURL = 'http://112.35.113.88'
-} else if (process.env.NODE_ENV == 'debug') {
-	axios.defaults.baseURL = '';
-} else if (process.env.NODE_ENV == 'production') {
-	axios.defaults.baseURL = 'http://112.35.113.88'
-}
+// if (process.env.NODE_ENV == 'development') {
+// 	axios.defaults.baseURL = 'http://122.114.48.61'
+// } else if (process.env.NODE_ENV == 'debug') {
+// 	axios.defaults.baseURL = '';
+// } else if (process.env.NODE_ENV == 'production') {
+// 	axios.defaults.baseURL = 'http://112.35.113.88'
+// }
 
 axios.defaults.timeout = 10000
 
@@ -26,19 +26,25 @@ export default{
 		back(){
             this.$router.back(-1)
 		},
-		postRequest(url, data = {}, method = 'post') {
+		postRequest(data = {}, method = 'post') {
 			return new Promise((resolve, reject) => {
 				axios({
-						url: url,
+						// url: url,
+						url: encodeURI("http://122.114.48.61:8080/garbage/api/service?json="+JSON.stringify(data)),
 						method: method,
 						headers: {
 							'Content-Type': 'application/json'
-						},
-						data: data
+						}
+						
 					})
 					.then(res => {
 						//成功
-						resolve(res)
+						if(res.data.result == '0'){
+							resolve(res)
+						}else{
+							Toast(res.data.resultNote);
+						}
+						
 					})
 					.catch(res => {
 						//失败

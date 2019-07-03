@@ -2,7 +2,7 @@
     <div class="c1">
         <myheader tit="消息" showL="true"></myheader>
         <ul class="list">
-            <li class="flex" v-for="i in 20">
+            <li class="flex" v-for="i in 10">
                 <div class="lf">
                     <span class="font1 sp1">系统消息</span>
                     <span class="font2">系统消息</span>

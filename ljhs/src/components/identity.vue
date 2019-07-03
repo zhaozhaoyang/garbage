@@ -30,7 +30,7 @@ export default {
     },
     methods:{
         next(){
-            if(false){
+            if(this.identity1 && this.identity2){
                 Toast('请选择身份');
                 
             }else{

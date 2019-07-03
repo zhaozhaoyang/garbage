@@ -10,7 +10,14 @@
 <script>
 import myheader  from './component/header.vue'
 export default {
-    components:{myheader}
+    components:{myheader},
+    created(){
+        this.postRequest({"cmd":"abouttus"})
+        .then(res =>{
+            console.log(res)
+            
+        })
+    }
 }
 </script>
 <style scoped>

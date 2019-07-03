@@ -14,13 +14,10 @@
 		</div>
 		<div ref="wrapper" class="wrapper">
 			<div>
-			<div>	
+			<div style="width:100%;height:4.27rem;background:#d7d7d7;">	
 				<van-swipe :autoplay="3000" indicator-color="white">
-					<van-swipe-item>
-						<img src="@/assets/images/banner.jpg" alt="" style="width:100%;height:4.27rem;">						
-					</van-swipe-item>
-					<van-swipe-item>
-						<img src="@/assets/images/banner.jpg" alt="" style="width:100%;height:4.27rem;">						
+					<van-swipe-item v-for="(item,index) in list" :key="index">
+						<img :src="item.image" alt="" style="width:100%;height:4.27rem;">		
 					</van-swipe-item>
 				</van-swipe>
 			</div>
@@ -51,7 +48,7 @@
 
 <script>
 import btmbar  from './component/btmbar.vue'
-import { Icon,Swipe, SwipeItem} from 'vant';
+import { Icon,Swipe, SwipeItem,Lazyload} from 'vant';
 import Bscroll from 'better-scroll'
 let scan = null
 export default {
@@ -60,8 +57,12 @@ export default {
 		return {
 			codeUrl: '',
 			showsao:false,
-			actnum:0
+			actnum:0,
+			list:[]  //轮播图
 		}
+	},
+	created(){
+		this.getBannerImg();
 	},
 	mounted(){
 		// window.addEventListener('scroll', this.handleScroll, true);  // 监听（绑定）滚轮滚动事件
@@ -70,6 +71,14 @@ export default {
       	})
 	},
 	methods: {
+		getBannerImg(){
+			this.postRequest({"cmd":"bannerlist"})
+			.then(res =>{
+				if(res.data.dataList){
+					this.list = res.data.dataList
+				}
+			})
+		},
 		gorank(){
 			this.$router.push('/rank')
 		},
