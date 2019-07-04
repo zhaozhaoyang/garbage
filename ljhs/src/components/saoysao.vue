@@ -28,8 +28,11 @@ export default {
     created(){        
         // console.log(JSON.stringify(res))
         // {"fid":"50976a52930c4bdf80cf5742397e5f89","phone":"15926264848","vilname":"小岗村","name":"赵六","group":"3组"}
-        console.log(this.$route.params.dataObject)
-        this.fuserInfo = JSON.parse(this.$route.params.dataObject)
+        // console.log(this.$route.params.dataObject)
+        // localStorage.getItem('dataObject')
+        this.fuserInfo = JSON.parse(localStorage.getItem('dataObject'))
+    },
+    mounted(){
     },
     methods:{
         pingfen(){
@@ -43,4 +46,5 @@ export default {
 </script>
 <style scoped>
 .c1{width: 100%;height: 100vh;background: #fff;}
+.van-field__control:disabled{color: #666!important;}
 </style>

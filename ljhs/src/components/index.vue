@@ -77,9 +77,11 @@ export default {
 
 			showdg:false,
 			bgmask:"background: url(" + require("../assets/images/bg.png") + ");background-size:100% 100%;",
+			youke:""
 		}
 	},
 	created(){
+		this.youke = window.sessionStorage.getItem("youke");
 		this.getBannerImg();
 		this.getUserInfo();
 	},
@@ -104,6 +106,9 @@ export default {
 			})
 		},
 		getUserInfo(){
+			if(this.youke == '3'){
+				return;
+			}
 			this.postRequest({"cmd":"userInfo",'uid':this.uid})
 			.then(res =>{
 				this.dataObject  = res.data.dataObject
@@ -113,13 +118,15 @@ export default {
 			})
 		},
 		gorank(){
+			if(this.youke == '3'){
+				return;
+			}
 			this.$router.push('/rank')
 		},
 		closemsk(){
 			this.showdg = false
 		},
 		goxunhe(){
-			// 要放开
 			if(this.dataObject.identity != '1' && this.dataObject.identity !='2'){
 				Toast('暂无权限！');	
 				return;
@@ -127,12 +134,21 @@ export default {
 			this.$router.push({ name: 'identity', params: {}})
 		},
 		gotoflei(){
+			if(this.youke == '3'){
+				return;
+			}
 			this.$router.push('/fenlei')
 		},
 		gonews(){
+			if(this.youke == '3'){
+				return;
+			}
 			this.$router.push('/news')
 		},
 		goscan(){
+			if(this.youke == '3'){
+				return;
+			}
 			this.showsao= true;
 			setTimeout(()=>{
 				this.startRecognize()
@@ -166,10 +182,9 @@ export default {
 		  that.closeScan();
 		//   this.showdg = false //扫码失败代码
 		
-
-		that.fid = that.$route.params.fid;
-        that.postRequest({"cmd":"scan",fid:result,uid:that.uid})
-        .then(res =>{			
+		that.postRequest({"cmd":"scan",fid:result,uid:that.uid})		
+        .then(res =>{		
+			localStorage.setItem('dataObject',JSON.stringify(res.data.dataObject))	
 			that.$router.push({
 				name:'saoysao',
 				params:{dataObject:JSON.stringify(res.data.dataObject)}

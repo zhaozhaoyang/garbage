@@ -16,7 +16,7 @@
 				<input type="password" class="t1" placeholder="输入密码" v-model="password">
 			</li>			
 		</ul>
-		<input type="button" class="btn" value="确认登录"  @click="logo">
+		<div class="btn" @click="logo">确认登录</div>
 	</div>
 </template>
 
@@ -39,6 +39,7 @@
 		methods: {
 			yklogo(){
 				this.$router.push('index')
+				window.sessionStorage.setItem("youke",3);
 			},
 			logo(){
 				if(this.name == '' || this.password==''){
@@ -48,14 +49,13 @@
 				this.postRequest({"cmd":"login","name":this.name,"password":this.password,"token":""})
 				.then(res =>{
 					console.log(res)
-					Notify({
-						message: '登陆成功！',
-						duration: 1000,
-						background: '#07c160'
-					});
+					Toast.success('登陆成功！');
+					setTimeout(()=>{
+						this.$router.push('index')
+					},1000)
+					window.sessionStorage.setItem("youke",'');
 					window.sessionStorage.setItem("uid",res.data.uid);
-					this.$store.commit("setuid",res.data.uid);
-					this.$router.push('index')
+					this.$store.commit("setuid",res.data.uid);					
 				})				
 				
 			}
@@ -75,7 +75,7 @@
 	.t1{width: 5rem;height: 99%;background: transparent;font-size: .374rem;margin-left: .5rem;}
 	/* .btn{display: block;width: 2.5rem;height: .63rem;line-height: .63rem;text-align: center;border-radius: .3rem;margin: 0 auto;margin-top: .9rem;font-size: .3rem;
 	background: linear-gradient(180deg,rgba(115, 200, 255, 1), rgba(49, 146, 255, 1));box-shadow: 0px 10px 24px 0px rgba(55, 151, 255, 0.3); color: #fff;} */
-	.btn{display: block;width: 4.56rem;height: 1.17rem;line-height: .63rem;text-align: center;border-radius:.586rem;margin: 0 auto;margin-top: .9rem;font-size: .43rem;
+	.btn{display: block;width: 4.56rem;height: 1.17rem;line-height: 1.17rem;text-align: center;border-radius:.586rem;margin: 0 auto;margin-top: .9rem;font-size: .43rem;
 	background:#157FCA; color: #fff;}
 
 </style>

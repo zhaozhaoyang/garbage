@@ -26,12 +26,12 @@ export default {
 		return {
             uid:this.$store.state.uid || window.sessionStorage.getItem("uid"),
             list:[],
-            nowPage:1,
+            page:1,
             pageCount:10
 		}
     },
     created(){
-        this.postRequest({"cmd":"myScoreList",'uid':this.uid,nowPage:this.nowPage,pageCount:this.pageCount})
+        this.postRequest({"cmd":"myScoreList",'uid':this.uid,nowPage:this.nowPage,page:this.pageCount})
         .then(res =>{
             console.log(res)
             if(res.data.dataList){

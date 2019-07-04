@@ -13,6 +13,7 @@
 </template>
 <script>
 import myheader  from './component/header.vue'
+import { Toast,Button ,Notify} from 'vant'
 export default {
     components:{myheader},
     data() {
@@ -21,9 +22,16 @@ export default {
     },
     methods:{
         logout(){
-            // this.$store.commit('setuid',"");
-            // window.sessionStorage.setItem("uid","")
-            this.$router.push("/login")
+            this.$store.commit('setuid',"");
+            this.$store.commit('setuserInfo',"");
+            window.sessionStorage.setItem("uid",{})
+            window.sessionStorage.setItem("youke",'');
+            window.sessionStorage.setItem("userInfo",{})
+            Toast.success('退出登录');
+            setTimeout(()=>{
+               this.$router.push("/login")
+            },1000)
+            
         }
     }
 }
