@@ -26,11 +26,16 @@ export default {
     },
     methods:{
         doIt(){
+            var that = this;
             this.postRequest({"cmd":"saveNickname",'uid':this.uid,nickname:this.value})
             .then(res =>{
                 // console.log(res)
-                Toast.success('修改成功！');
-                this.$router.push('/my')
+                Toast.success({
+                    message:'修改成功！'
+                })
+                setTimeout(()=>{
+                    that.$router.push('/my')
+                },1000)
             })           
             
         }

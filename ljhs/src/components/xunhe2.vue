@@ -6,9 +6,9 @@
                 <p class="font1">巡河河段：</p>
                 <van-radio-group v-model="radio"  @change="sel_he">
                     <div class="c_he">
-                        <van-radio name="1" checked-color="#157FCA"><span class="font2">白坡滩</span></van-radio>
-                        <van-radio name="2" checked-color="#157FCA"><span class="font2">单选框 1</span></van-radio>
-                        <van-radio name="3" checked-color="#157FCA"><span class="font2">单选框 1</span></van-radio>
+                        <van-radio :name="index" checked-color="#157FCA" v-for="(it,index) in riverList" :key="index"><span class="font2">{{it.name}}</span></van-radio>
+                        <!-- <van-radio name="2" checked-color="#157FCA"><span class="font2">单选框 1</span></van-radio>
+                        <van-radio name="3" checked-color="#157FCA"><span class="font2">单选框 1</span></van-radio> -->
                     </div>
                 </van-radio-group>                
             </div>
@@ -26,7 +26,7 @@
                 <p class="font1">存在问题：</p>
                 <div class="truble bd">
                    <div style="width:80%;">
-                        <van-tag :plain='item.show' type="primary" round color="#157FCA" @click="choose(index)" v-for="(item,index) in questionList" :key="index">{{item.sort}}</van-tag>
+                        <van-tag :plain='item.show' type="primary" round color="#157FCA" @click="choose(index)" v-for="(item,index) in questionList" :key="index">{{item.questioncontent}}</van-tag>
                     </div>
                 </div>
             </div>
@@ -37,15 +37,20 @@
                 </textarea>
             </div>
             <div class="sec1">
-                <p class="font1">其他问题描述：</p>
-                <textarea class="board" name="" id="" cols="30" rows="10" placeholder="请描述你的问题">
+                <p class="font1">上次问题解决情况：</p>
+                <textarea class="board" name="" id="" cols="30" rows="10" placeholder="请输入...">
 
                 </textarea>
             </div>
             <div class="sec1">
                 <p class="font1">上传图片：</p>
-                <div>
-                    <img src="../assets/images/upcamera.jpg" alt="" @click="getImage" style="height:50px;width:50px;position:relative;top:-3px;">
+                <div style="display:flex;">
+                    <img src="../assets/images/upcamera.jpg" class="cameraIcon"  @click="getImage" v-if="images.length<5">
+                    <div style="position:relative;"  v-for="(it,index) in images" :key="index">
+                        <img :src="it" alt=""  class="cameraIcon" @click="showBig(index)">
+                        <!-- <van-icon name="clear" @click="delImg(index)"/> -->
+                        <img class="del" src="../assets/images/del.png" alt="" @click="delImg(index)" >
+                    </div>                    
                     <!-- <van-uploader  v-model="fileList" multiple :max-count="5" capture="camera" preview-size="50">
                         <div class="camera">
                             <img src="../assets/images/upcamera.jpg" alt="" style="height:50px;width:50px;position:relative;top:-3px;">
@@ -63,11 +68,22 @@
                 <m-ybutton size="3" text="开始巡河" @click="close_dg"></m-ybutton>
             </div>            
         </van-dialog>
+        <van-dialog
+            className="mydg"
+            v-model="showbig"
+            :showConfirmButton="false"
+            :closeOnClickOverlay="true"
+            v-if="nowbig!=''"
+            @click="closebig"
+            >
+            <img :src="nowbig"  style="width:100%;height:300px;">
+        </van-dialog>
     </div>
 </template>
 <script>
 import myheader  from './component/header.vue'
-import http from 'axios'
+import { Toast} from 'vant'
+import axios from 'axios'
 export default {
     components:{myheader},
     data() {
@@ -77,20 +93,30 @@ export default {
             radiow:'0',
             // fileList:[],
             dg_show:true,
+            showbig:false,
             showConfirmButton:false,
+            nowbig:"",
+            riverList:[],
 
-            questionList:[]
+            questionList:[],
+            content:"",       //其他问题描述
+            // images:['http://122.114.48.61:8080/garbage/userfiles/sendfile/2019/07/20190704145215fbJN.jpg'],
+            images:[],
+            weather:"",
+            reachname:"",    //河段名称
+            lastquestion:"", //上次问题解决情况
+            question:""
 		}
     },
     created(){
-        console.log(this.uid)
-        // this.postRequest({"cmd":"reachList","uid":this.uid})
-        // .then(res =>{
-        //     console.log(res)
-        //     if(res.data.dataList){
-        //         this.list = res.data.dataList
-        //     }
-        // })
+        // 河段
+        this.postRequest({"cmd":"reachList","uid":this.uid})
+        .then(res =>{
+            // console.log(res)
+            if(res.data.dataList){
+                this.riverList = res.data.dataList
+            }
+        })
         // 问题列表
         this.questions()
     },
@@ -99,6 +125,7 @@ export default {
             this.postRequest({"cmd":"questionList"})
             .then(res =>{
                 if(res.data.dataList){
+                    // console.log(res)
                     for(let i in res.data.dataList){
                         res.data.dataList[i].show = true
                     }
@@ -106,15 +133,31 @@ export default {
                 }
             })
         },
-        sel_he(){
-
+        delImg(index){
+            this.images.splice(index, 1);
         },
-        sel_weather(){
-
+        showBig(index){           
+            this.nowbig=this.images[index]
+            this.showbig = true
+        },
+        closebig(){
+            this.showbig = false
+        },
+        sel_he(num){
+            this.reachname = this.riverList[num].name
+        },
+        sel_weather(num){
+            if(num == '1')
+                this.weather = '晴'
+            else if(num == '2')
+                this.weather = '多云'
+            else
+                this.weather = '阴天'
+            
         },
         choose(n){      
             // this['isplain'+n] =  !this['isplain'+n];
-            this.questionList[n].show = !this.questionList[n].show
+            this.questionList[n].show = !this.questionList[n].show            
         }, 
         close_dg(){
             this.dg_show = false;
@@ -133,7 +176,19 @@ export default {
                         var newfile;
                         fileReader.onloadend = function(f){
                             newfile = self.dataURLtoFile(f.target.result.toString(),'detail.png');//图片文件流                            
-                            self.onRead1(newfile,f.target.result.toString())
+                            self.onRead1(newfile,f.target.result.toString(),obj=>{
+                                var formdata = new FormData();
+                                console.log(obj)
+                                formdata.append('file',obj);
+                                axios.post('http://122.114.48.61:8080/garbage/api/uploadFile',formdata).then(res=>{
+                                    console.log(JSON.stringify(res))
+                                    if(res.data.result=='0'){                                       
+                                       self.images.push(res.data.filepath)
+                                    }
+                                }).catch(err=>{
+                                    Toast('图片上传失败！');	
+                                })
+                            })
                             
                         }								
                     })
@@ -163,22 +218,30 @@ export default {
          },
         doIt(){
             // 提交
-            if(true){
-                
+            var qarr =[];//存储问题
+            for(let i in this.questionList){
+                if(!this.questionList[i].show){
+                    qarr.push(this.questionList[i].questioncontent)
+                }
             }
-            this.postRequest({cmd:"subRiverPotrol",uid:this.uid,reachname:"",weather:"",question:"",content:"",lastquestion:"",images:""})
+           this.question = qarr.toString()            
+            if(this.reachname ==''||this.weather==""||this.images.length=='0'){
+                Toast('河段名称、天气、上传图片不能为空！');	
+                return;
+            }
+
+            this.postRequest({cmd:"subRiverPotrol",uid:this.uid,reachname:this.reachname,weather:this.weather,question:this.question,content:this.content,lastquestion:this.lastquestion,images:this.images})
             .then(res =>{
                 console.log(res)
-               
-            })
+                this.$router.push('/upok') 
+            })            
             
-            this.$router.push('/upok')
         },
-        onRead1(file,content) {	
-				if(file.size > 4194304) {
-					Toast("图片大小不能超过4M")
-					return
-				}
+        onRead1(file,content,callback) {
+				// if(file.size > 4194304) {
+				// 	console.log("图片大小不能超过4M")
+				// 	return;
+				// }
 				if (/\/(?:jpeg|png)/i.test(file.type) && file.size > 204800) {
 					let self = this
 					let canvas = document.createElement('canvas')
@@ -236,50 +299,16 @@ export default {
 						}
 					
 						//进行最小压缩
-						content = canvas.toDataURL("image/jpeg", 0.1);
-						//console.log("压缩前：" + initSize);
-						//console.log("压缩后：" + file.content.length);
-						//console.log("压缩率：" + (100 * (initSize - file.content.length) / initSize) + "%");
-						//console.log(file.content)
-					
+						content = canvas.toDataURL("image/jpeg", 0.1);					
 						canvas.width = canvas.height = 0;
 					
 						let files = self.dataURLtoFile(content, Date.parse(Date()) + '.jpg')
-						files = {
-							content: file.content,
-							file: files
-						};
-						var formdata = new FormData()
-                        formdata.append('file', files.file)
-                        http("http://122.114.48.61:8080/garbage/api/service/api/uploadFile",formdata).then(res=>{
-                            console.log(res)
-                        })
-						// this.postRequest('api/upload', formdata).then(res => {
-						// 	console.log(res)
-						// 	if (res.data.success == true) {
-						// 		let upFlag = self.upFlag;
-						// 		let imgFlag = self.imgFlag;
-						// 		self[imgFlag+upFlag] = res.data.body.list[0]
-						// 	}
-						// }).catch(res => {
-						// 	console.log(res)
-						// })
+                        callback(files)
 					}
 				}else{
-					let self = this
-					var formdata = new FormData()
-					formdata.append('file', file.file)
-					this.postRequest('api/upload', formdata).then(res => {
-						if (res.data.success == true) {
-							let upFlag = self.upFlag;
-							let imgFlag = self.imgFlag;
-							self[imgFlag+upFlag] = res.data.body.list[0]
-						}
-					}).catch(res => {
-						console.log(res)
-					})
+                    callback(file)					
 				}
-			}
+        }
     }
 }
 </script>
@@ -304,4 +333,17 @@ export default {
 .dg_content{display: flex;flex-flow: column;align-items: center;}
 .dg_content img{margin-top: .3rem;}
 .dg_content p{width: 80%;margin: .5rem 0;line-height: .5rem;color: #333;font-size: 15px;}
+.cameraIcon{height:50px;width:50px;margin-right:12px;border-radius:3px;}
+
+
+.del{
+    position: absolute;
+    right: 4px;
+    top: -5px;
+    width: 18px;
+    height: 18px
+}
+.mydg{
+    background: transparent;
+}
 </style>

@@ -29,11 +29,17 @@ export default {
     },
     methods:{
         doIt(){
+            var that = this
             this.postRequest({"cmd":"subFeedback",uid:this.uid,content:this.content})
             .then(res =>{
                 console.log(res)
-                Toast.success('提交成功');
-                this.$router.push('/my')
+                Toast.success({
+                    message:'提交成功'
+                })
+                setTimeout(()=>{
+                    that.$router.push('/my')
+                },1000)
+                 
             })
             
         }

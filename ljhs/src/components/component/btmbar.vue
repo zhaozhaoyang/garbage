@@ -1,6 +1,7 @@
 <template>
     <div class="bar">
-        <van-tabbar v-model="currentIndex" @change="change" :fixed='fixed' active-color="#157FCA" :safe-area-inset-bottom='ipx'>
+        <!-- <van-tabbar v-model="currentIndex" @change="change" :fixed='fixed' active-color="#157FCA" :safe-area-inset-bottom='ipx'> -->
+        <van-tabbar v-model="currentIndex" @change="change" :fixed='fixed' active-color="#157FCA">
             <van-tabbar-item>
                 <span class="f1">首页</span>
                 <img

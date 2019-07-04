@@ -3,13 +3,13 @@
        <myheader tit="我的"></myheader>
         <div class="avator">
             <div class="upImg">
-                 <van-uploader>
-                    <img class="face" src="@/assets/images/touxiang.png" alt="" @click="editFace">
+                 <van-uploader :after-read="editFace">
+                    <img class="face" :src="src" alt="">
                 </van-uploader>
             </div>           
             
             <div class="name">
-               <span class="f1">{{dataObject.nickname}}</span>
+               <span class="f1">{{dataObject.nickname?dataObject.nickname:'游客'}}</span>
                 <span @click="goEdit">
                     <!-- <van-icon name="edit" size="18"/> -->
                     <img src="@/assets/images/edit.jpg" class="edit">
@@ -27,6 +27,7 @@
 import btmbar  from './component/btmbar.vue'
 import myheader  from './component/header.vue'
 import { Toast } from 'vant';
+import axios from 'axios'
 export default {
     components:{btmbar,myheader},
     data() {
@@ -34,27 +35,46 @@ export default {
             uid:this.$store.state.uid || window.sessionStorage.getItem("uid"),
             nobder:false,
             actnum:2,
-            dataObject:""
+            dataObject:"",
+            src:require('@/assets/images/touxiang.png')
         }
     },
     created(){
         this.postRequest({"cmd":"userInfo",'uid':this.uid})
         .then(res =>{
-            this.dataObject  = res.data.dataObject
-            // console.log(res)
+            this.dataObject  = res.data.dataObject           
         })
+        // console.log(window.sessionStorage.getItem("userInfo"))
+        // this.dataObject  = this.$store.state.userInfo || window.sessionStorage.getItem("userInfo")
     },
     methods:{
         goEdit(){
             this.$router.push({path: '/changeNick?name=' + this.dataObject.nickname});
         },
-        editFace(){
-            this.postRequest({"cmd":"saveIcon",'uid':this.uid,icon:""})
-            .then(res =>{
+        editFace(file){
+            var that = this;
+            var formdata = new FormData();
+            formdata.append('file',file.file);
+            axios.post('http://122.114.48.61:8080/garbage/api/uploadFile',formdata).then(res=>{
                 console.log(res)
-                Toast('修改成功！');	
+                if(res.data.result=='0'){
+                    that.src = res.data.filepath
+                    that.postRequest({"cmd":"saveIcon",'uid':this.uid,icon:res.data.filepath}).then(result=>{
+                        console.log(result)
+                        Toast('修改成功！');
+                    })
+                }
+            }).catch(err=>{
+                Toast('头像上传失败！');	
             })
-        }
+            
+            // this.postRequest({"cmd":"saveIcon",'uid':this.uid,icon:""})
+            // .then(res =>{
+            //     console.log(res)
+            //     Toast('修改成功！');	
+            // })
+        },
+
     }
 }
 </script>

@@ -4,7 +4,11 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		uid:''		
+		uid:'',
+		userInfo:{}
+		// identity:'',
+		// nickname:'',
+		// phone:''
 	},
 	//getters是store的计算属性,过滤返回的是done的值是true的列表
 	getters: {},
@@ -12,6 +16,12 @@ const store = new Vuex.Store({
 	mutations: {
 		setuid(state,data) {
 			state.uid = data
+		},
+		setuserInfo(state,data) {
+			state.userInfo = data
+			// state.identity = data.identity;
+			// state.nickname = data.nickname;
+			// state.phone = data.phone;
 		}
 	}
 })

@@ -16,6 +16,8 @@ import myscore from '@/components/myscore'
 import set from '@/components/set'
 import suggest from '@/components/suggest'
 import aboutUs from '@/components/aboutUs'
+import webview from '@/components/webview'
+
 Vue.use(Router)
 
 export default new Router({
@@ -102,7 +104,12 @@ export default new Router({
 			path: '/suggest',
 			name:'suggest',
 			component: suggest
-		}
+		},
+		{
+			path: '/webview',
+			name:'webview',
+			component: webview
+		}		
 		
 	]
 })

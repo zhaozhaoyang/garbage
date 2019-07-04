@@ -14,10 +14,10 @@
 		</div>
 		<div ref="wrapper" class="wrapper">
 			<div>
-			<div style="width:100%;height:4.27rem;background:#d7d7d7;">	
-				<van-swipe :autoplay="3000" indicator-color="white">
-					<van-swipe-item v-for="(item,index) in list" :key="index">
-						<img :src="item.image" alt="" style="width:100%;height:4.27rem;">		
+			<div class="lunbo">	
+				<van-swipe :autoplay="3000" indicator-color="white" style="height:100%;">
+					<van-swipe-item v-for="(item,index) in bannerlist" :key="index">
+						<img :src="item.image" alt="" style="" class="lunboImg">		
 					</van-swipe-item>
 				</van-swipe>
 			</div>
@@ -43,26 +43,45 @@
 			</div>
 		</div>
 		<btmbar @goIndex="goto" :actived='actnum'></btmbar>
+		<van-dialog
+            v-model="showdg"
+            :showConfirmButton="false"
+            :closeOnClickOverlay="true"
+            >
+			<div>
+				<!-- <img src="@/assets/images/bg.png" style="width:280px;height:240px;"> -->
+				<div :style="bgmask" class="saobg">
+					<div class="tipss">请扫描你所在区域二维码</div>	
+					<div class="btn" @click="closemsk">确定</div>
+				</div>
+			</div>
+        </van-dialog>
 	</div>
 </template>
 
 <script>
 import btmbar  from './component/btmbar.vue'
-import { Icon,Swipe, SwipeItem,Lazyload} from 'vant';
+import { Icon,Swipe, SwipeItem,Lazyload,Toast} from 'vant';
 import Bscroll from 'better-scroll'
 let scan = null
 export default {
 	components:{btmbar,Bscroll},
 	data() {
 		return {
+			uid:this.$store.state.uid || window.sessionStorage.getItem("uid"),
 			codeUrl: '',
 			showsao:false,
 			actnum:0,
-			list:[]  //轮播图
+			bannerlist:[],  //轮播图
+			dataObject:{},
+
+			showdg:false,
+			bgmask:"background: url(" + require("../assets/images/bg.png") + ");background-size:100% 100%;",
 		}
 	},
 	created(){
 		this.getBannerImg();
+		this.getUserInfo();
 	},
 	mounted(){
 		// window.addEventListener('scroll', this.handleScroll, true);  // 监听（绑定）滚轮滚动事件
@@ -75,17 +94,37 @@ export default {
 			this.postRequest({"cmd":"bannerlist"})
 			.then(res =>{
 				if(res.data.dataList){
-					this.list = res.data.dataList
+					console.log(res)
+					var bannerlist= res.data.dataList
+					for(let i of bannerlist){
+						i.image = 'http://122.114.48.61:8080/'+i.image 
+					}
+					this.bannerlist = bannerlist
 				}
+			})
+		},
+		getUserInfo(){
+			this.postRequest({"cmd":"userInfo",'uid':this.uid})
+			.then(res =>{
+				this.dataObject  = res.data.dataObject
+				window.sessionStorage.setItem("userInfo",res.data.dataObject)
+				this.$store.commit("setuserInfo",res.data.dataObject);
+
 			})
 		},
 		gorank(){
 			this.$router.push('/rank')
 		},
+		closemsk(){
+			this.showdg = false
+		},
 		goxunhe(){
-			console.log(2222)
+			// 要放开
+			if(this.dataObject.identity != '1' && this.dataObject.identity !='2'){
+				Toast('暂无权限！');	
+				return;
+			}
 			this.$router.push({ name: 'identity', params: {}})
-			
 		},
 		gotoflei(){
 			this.$router.push('/fenlei')
@@ -125,11 +164,17 @@ export default {
           that.codeUrl = result
         //   alert(result)
 		  that.closeScan();
-		  
-		  that.$router.push({
-			  name:'saoysao',
-			  params:{}
-		  })
+		//   this.showdg = false //扫码失败代码
+		
+
+		that.fid = that.$route.params.fid;
+        that.postRequest({"cmd":"scan",fid:result,uid:that.uid})
+        .then(res =>{			
+			that.$router.push({
+				name:'saoysao',
+				params:{dataObject:JSON.stringify(res.data.dataObject)}
+			})	
+        })
 
 		}
 		setTimeout(()=>{
@@ -159,7 +204,6 @@ export default {
 </script>
 
 <style scoped>
-*{ touch-action: none; }
 	.box{width: 100%;box-sizing: border-box;background: #fff;}
 	.header{background: #fff;padding: 0 .2rem 0;height: 1.17rem;display: flex;flex-flow: row;align-content: center;justify-content: space-between;line-height: 1.17rem;}
 	.van-icon{line-height: 1.17rem;}
@@ -180,6 +224,8 @@ export default {
 	  background: rgba(0,0,0,0.9);
 	  z-index: 11;
 	}
+	.lunbo{width:100%;height:4.27rem;background:#d7d7d7;}
+	.lunboImg{width:100%;height:4.27rem;}
 	.cancelscan{
 		position: absolute;
 		background: rgba(0,0,0);
@@ -206,4 +252,17 @@ export default {
 		height: 90px;
 		border-radius: 50%;
 	}
+	.van-dialog{
+		background: transparent;
+		text-align: center;
+	}
+	.saobg{
+		height: 240px;
+		width: 280px;
+		margin: 0 auto;
+		position: relative;
+	}
+	.tipss{color: #666;font-size: 14px;position: relative;top: 3.5rem;}
+	.btn{display: block;width: 4.56rem;height: 1.17rem;line-height: 1.17rem;text-align: center;border-radius:.586rem;font-size: .43rem;
+	background:#157FCA; color: #fff;position: absolute;bottom: 20px;left: 1.56rem;}
 </style>

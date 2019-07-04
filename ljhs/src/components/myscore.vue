@@ -33,9 +33,10 @@ export default {
     created(){
         this.postRequest({"cmd":"myScoreList",'uid':this.uid,nowPage:this.nowPage,pageCount:this.pageCount})
         .then(res =>{
+            console.log(res)
             if(res.data.dataList){
                 this.list = res.data.dataList
-                console.log(res)
+                
             }
            
         })

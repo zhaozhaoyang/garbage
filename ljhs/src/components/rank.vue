@@ -59,11 +59,7 @@ export default {
 		}
     },
     created(){
-        this.postRequest({"cmd":"scoreSort",'uid':this.uid,type:0,nowPage:this.nowPage,pageCount:this.pageCount})
-        .then(res =>{
-            this.list  = res.data.dataList
-            console.log(res)
-        })
+        this.getList()
     },
     mounted(){
         this.$nextTick(() => {
@@ -71,13 +67,19 @@ export default {
       	})
     },
     methods:{
-        
+        getList(){
+            this.postRequest({"cmd":"scoreSort",'uid':this.uid,type:0,nowPage:this.nowPage,pageCount:this.pageCount})
+            .then(res =>{
+                this.list  = res.data.dataList
+                console.log(res)
+            })
+        }
     }
 }
 </script>
 <style scoped>
 .header{background: #fff;height: 1.17rem;line-height: 1.17rem;text-align: center;font-size: .48rem;font-weight: bold;}
-.c1{width: 9.31rem;margin: .3rem auto 0;background: #fff;height: 14rem;overflow-y: hidden;border-radius: 5px;}
+.c1{width: 9.31rem;margin: .3rem auto 0;background: #fff;height: 13.6rem;overflow-y: hidden;border-radius: 5px;}
 .c1 li{height: 1.17rem;width: 100%;display: flex;flex-flow: row;align-content: center;line-height: 1.17rem;border-bottom: 1px solid#f7f7f7;}
 .medal{flex: 1;text-align: center;}
 .medal img{width:.45rem;height:.56rem;}

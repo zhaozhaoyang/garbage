@@ -1,54 +1,94 @@
 <template>
     <div class="c1">
         <myheader tit="农户列表" showL="true"></myheader>
-        <ul class="list">
-            <li v-for="(item,index) in list" :key="index">
-                <div class="b1">
-                    <img src="@/assets/images/touxiang.png" alt="">
-                </div>
-                <div class="b2">
-                    <div class="tm">{{item.adtime}}</div>
-                    <div class="bb2">
-                        <div class="men">{{item.name}}</div>
-                        <div class="blong">所属村：{{item.vname}}</div>
-                    </div>               
-                    <div class="b3 color6">
-                        <div class="phone">联系方式：{{item.phone}}</div>                    
-                        <div class="color6">所属组：{{item.gname}}</div>
+        <!-- <scroll :click="clicks" class="wrap"> -->
+            <ul class="list">
+                <li v-for="(item,index) in list" :key="index">
+                    <div class="b1">
+                        <img src="@/assets/images/touxiang.png" alt="">
                     </div>
-                </div>                
-            </li>
-        </ul>
-        <ul class="list" v-if="list.length==0" >
-           <li style="text-align:center;">暂无数据...</li> 
-        </ul>
+                    <div class="b2">
+                        <div class="tm">{{item.adtime}}</div>
+                        <div class="bb2">
+                            <div class="men">{{item.name}}</div>
+                            <div class="blong">所属村：{{item.vname}}</div>
+                        </div>               
+                        <div class="b3 color6">
+                            <div class="phone">联系方式：{{item.phone}}</div>                    
+                            <div class="color6">所属组：{{item.gname}}</div>
+                        </div>
+                    </div>                
+                </li>
+            </ul>
+        <!-- </scroll> -->
+        
+        <p class="nodata" v-if="list.length==0">
+            暂无数据...
+        </p>
     </div>
 </template>
 <script>
 import myheader  from './component/header.vue'
+import { Toast } from 'vant'
+// import Scroll from './component/scroll.vue'
 export default {
     components:{myheader},
     data() {
 		return {
+            clicks:true,
             uid:this.$store.state.uid || window.sessionStorage.getItem("uid"),
             list:[],
-            totalPage:"" ,//总页数
-            nowPage: 1,
-            pageCount:10
+            totalPage:0 ,//总页数
+            page: 1,
+            pageCount:10,
+            // 是否加载完成
+            isload: true
 		}
     },
     created(){
-        this.getList(1)
+        this.getList()
+        window.onscroll = function() {
+        if (!this.isload) {
+            return;
+        }
+        var scrollTop =document.body.scrollTop || document.documentElement.scrollTop;
+        var clientHeight=document.compatMode == "CSS1Compat"?document.documentElement.clientHeight:document.body.clientHeight;
+        var scrollHeight=document.body.scrollHeight|| document.documentElement.scrollHeight;
+        // console.log(scrollTop +'----'+clientHeight+'---'+scrollHeight)
+        if (
+            scrollTop + (clientHeight - 0) >=scrollHeight - 0
+        ) {
+            this.getList();
+        }
+        }.bind(this);
+    },
+    mounted(){
+        
     },
     methods:{
-        getList(num){
-            var data = {"cmd":"farmerlist","uid":this.uid,"nowPage":num,"pageCount":this.pageCount}
+        getList(){
+            if(!this.isload){
+                return;
+            }
+            if(this.page!=1 && this.page>this.totalPage){
+                Toast.toast('没有更多数据了..')
+                return;
+            }
+            Toast.loading({
+                mask: false,
+                message: '加载中...',
+                duration:0
+            })
+            this.isload = false;
+            var data = {"cmd":"farmerlist","uid":this.uid,"nowPage":this.page}
             this.postRequest(data)
             .then(res =>{
-                console.log(res)                
+                console.log(res)  
+                this.isload=true;  
+                this.page=this.page+1;  
                 if(res.data.dataList){
-                    this.list = res.data.dataList
                     this.totalPage = res.data.totalPage
+                    this.list =this.list.concat(res.data.dataList);
                 }
             })
         }
@@ -57,8 +97,16 @@ export default {
 </script>
 <style scoped>
 .color6{color: #999;}
-.c1{background: #fff;height: 100vh;}
+.c1{background: #fff;height: 100vh;position: relative;}
 .list{
+    width: 100%;
+}
+.nodata{width:100%;text-align:center;height:100px;line-height:100px;color: #999;font-size: 14px;}
+.wrap{
+    position: absolute;
+    top: 1.17rem;
+    left: 0;
+    bottom: 0px;
     width: 100%;
 }
 .list li{

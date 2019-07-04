@@ -24,18 +24,30 @@ export default {
             identity1:true,
             identity2:true,
             src1:require('../assets/images/nok.png'),
-            src2:require('../assets/images/nok.png')
+            src2:require('../assets/images/nok.png'),
+            identy:this.$store.state.userInfo || window.sessionStorage.getItem("userInfo"),
+            idFlag:''
             
 		}
+    },
+    created(){
+
     },
     methods:{
         next(){
             if(this.identity1 && this.identity2){
                 Toast('请选择身份');
-                
-            }else{
-                this.$router.push('/xunhe2')
-            }          
+                return;                
+            }
+            
+            console.log(this.identy.identity)
+            if(this.idFlag !=this.identy.identity){
+                Toast('身份选择不正确！');
+                return;    
+            }
+
+            this.$router.push('/xunhe2')
+                     
         },
         huan(num){
             if(num == '1'){
@@ -43,11 +55,13 @@ export default {
                 this.identity1=false
                 this.src1 = require('../assets/images/ok.png')
                 this.src2 = require('../assets/images/nok.png')
+                this.idFlag = 2
             }else if(num == '2'){
                 this.identity2=false
                 this.identity1=true
                 this.src1 = require('../assets/images/nok.png')
                 this.src2 = require('../assets/images/ok.png')
+                this.idFlag = 1
             }
         }
     }

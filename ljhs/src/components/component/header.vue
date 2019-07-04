@@ -22,7 +22,7 @@ export default {
 }
 </script>
 <style scoped>
-.header{background: #157FCA;height: 1.17rem;line-height: 1.17rem;text-align: center;font-size: .5rem;color: #fff;position: relative;display: flex;flex-flow: row;align-content: center;justify-content: center;}
+.header{background: #157FCA;height: 1.17rem;line-height: 1.17rem;text-align: center;font-size: .5rem;color: #fff;position: relative;display: flex;flex-flow: row;align-content: center;justify-content: center;z-index: 100;}
 .title{font-size: .48rem;}
 .leftA{position: absolute;left: .15rem;top: .3rem;}
 </style>
