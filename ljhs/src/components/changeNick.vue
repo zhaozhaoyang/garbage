@@ -30,6 +30,9 @@ export default {
             this.postRequest({"cmd":"saveNickname",'uid':this.uid,nickname:this.value})
             .then(res =>{
                 // console.log(res)
+                var obj = JSON.parse(window.sessionStorage.getItem("userInfo"))
+                obj.nickname = that.value
+                window.sessionStorage.setItem("userInfo",JSON.stringify(obj))
                 Toast.success({
                     message:'修改成功！'
                 })

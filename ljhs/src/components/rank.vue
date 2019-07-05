@@ -3,11 +3,11 @@
         <div class="header">
             <div>分值排行</div> 
         </div>    
-        <van-tabs v-model="active" swipeable color="#157FCA"  :line-height="2">
+        <van-tabs v-model="active" swipeable color="#157FCA"  :line-height="2" @change="changeTab">
             <van-tab  title="总排行" >
                <div class="c1" ref="wrapper">
                    <ul>
-                    <li v-for="(i,index) in 20">
+                    <li v-for="(i,index) in list" :key="index">
                         <div class="medal">
                             <img src="@/assets/images/one.jpg" alt="" v-if="index==0">
                             <img src="@/assets/images/two.jpg" alt="" v-if="index==1">
@@ -16,23 +16,81 @@
                         </div>                       
                         <div class="who">
                             <img src="@/assets/images/touxiang.png" alt="">
-                            <span>战三</span>
+                            <span>{{i.name}}</span>
                         </div>
                         <span class="score">
-                            3214
+                            {{i.score}}
                         </span>
                     </li>
                    </ul>
+                   <p class="nodata" v-if="list.length==0"> 暂无数据...  </p>                  
                </div>
             </van-tab>
             <van-tab  title="日排行" >
-                内容 2
+               <div class="c1" ref="wrapper">
+                   <ul>
+                    <li v-for="(i,index) in list" :key="index">
+                        <div class="medal">
+                            <img src="@/assets/images/one.jpg" alt="" v-if="index==0">
+                            <img src="@/assets/images/two.jpg" alt="" v-if="index==1">
+                            <img src="@/assets/images/tree.jpg" alt="" v-if="index==2">
+                            <span v-if="index>2" class="font1">{{index}}</span>
+                        </div>                       
+                        <div class="who">
+                            <img src="@/assets/images/touxiang.png" alt="">
+                            <span>{{i.name}}</span>
+                        </div>
+                        <span class="score">
+                            {{i.score}}
+                        </span>
+                    </li>
+                   </ul>
+                   <p class="nodata" v-if="list.length==0"> 暂无数据...  </p>
+               </div>
             </van-tab>
             <van-tab  title="月排行" >
-                内容 3
+                <div class="c1" ref="wrapper">
+                   <ul>
+                    <li v-for="(i,index) in list" :key="index">
+                        <div class="medal">
+                            <img src="@/assets/images/one.jpg" alt="" v-if="index==0">
+                            <img src="@/assets/images/two.jpg" alt="" v-if="index==1">
+                            <img src="@/assets/images/tree.jpg" alt="" v-if="index==2">
+                            <span v-if="index>2" class="font1">{{index}}</span>
+                        </div>                       
+                        <div class="who">
+                            <img src="@/assets/images/touxiang.png" alt="">
+                            <span>{{i.name}}</span>
+                        </div>
+                        <span class="score">
+                            {{i.score}}
+                        </span>
+                    </li>
+                   </ul>
+                   <p class="nodata" v-if="list.length==0"> 暂无数据...  </p>
+               </div>
             </van-tab>
             <van-tab  title="年排行" >
-                内容 4
+                <div class="c1" ref="wrapper">
+                   <ul>
+                    <li v-for="(i,index) in list" :key="index">
+                        <div class="medal">
+                            <img src="@/assets/images/one.jpg" alt="" v-if="index==0">
+                            <img src="@/assets/images/two.jpg" alt="" v-if="index==1">
+                            <img src="@/assets/images/tree.jpg" alt="" v-if="index==2">
+                            <span v-if="index>2" class="font1">{{index}}</span>
+                        </div>                       
+                        <div class="who">
+                            <img src="@/assets/images/touxiang.png" alt="">
+                            <span>{{i.name}}</span>
+                        </div>
+                        <span class="score">
+                            {{i.score}}
+                        </span>
+                    </li>
+                   </ul>
+                   <p class="nodata" v-if="list.length==0"> 暂无数据...  </p>
+               </div>
             </van-tab>
             </van-tabs>      
         <btmbar @goIndex="goto"  :actived='actnum'></btmbar>
@@ -41,6 +99,7 @@
 <script>
 import btmbar  from './component/btmbar.vue'
 import Bscroll from 'better-scroll'
+import { Toast } from 'vant'
 export default {
     components:{btmbar,Bscroll},
 	data() {
@@ -51,28 +110,74 @@ export default {
             active:0,
             actnum:1,
 
-            type:"", // 0总排行 1日排行 2月排行 3年排行
-            nowPage:1,
+            type:0, // 0总排行 1日排行 2月排行 3年排行
+            page:1,
             pageCount:10,
             list:[],
-            totalPage:""
+            totalPage:1,
+            isend:true,
+            pullup: {
+                type: Boolean,
+                default: false
+            },
 		}
     },
     created(){
         this.getList()
     },
     mounted(){
-        this.$nextTick(() => {
-      	  this.scroll = new Bscroll(this.$refs.wrapper, {})
-      	})
+        setTimeout(() => {
+            this._initScroll()
+        }, 20)
+         this.$nextTick(() => {
+            this.scroll = new Bscroll(this.$refs.wrapper, {})
+        })
     },
     methods:{
-        getList(){
-            this.postRequest({"cmd":"scoreSort",'uid':this.uid,type:0,nowPage:this.nowPage,pageCount:this.pageCount})
-            .then(res =>{
-                this.list  = res.data.dataList
-                console.log(res)
+        _initScroll() {           
+            if (this.pullup) {
+            this.scroll.on('scrollEnd', () => {
+                if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+                    if(this.totalPage<this.page){
+                        Toast('没有更多数据了....')             
+                        return;
+                    }
+                    this.getList()
+                }
             })
+            }
+        },
+        getList(num){
+            if(num == '1'){
+                this.page = 1;
+                this.list=[]
+            }
+            if(!this.isend){
+                return;
+            }
+            Toast.loading({
+                mask: false,
+                message: '加载中...',
+                loadingType:"spinner",
+                duration:0
+            })
+            this.isend = false;
+            var params = {"cmd":"scoreSort",'uid':this.uid,type:this.type,nowPage:this.page,pageCount:this.pageCount}
+            this.postRequest(params)
+            .then(res =>{
+                this.isend = true;
+                if(res.data.dataList){                    
+                    this.totalPage= res.data.totalPage                    
+                    this.list = [...this.list, ...res.data.dataList]                    
+                    this.page=this.page+1;
+                }
+                
+            })
+        },
+        changeTab(num){
+            // console.log(num)
+            this.type = num;
+            this.getList('1')
         }
     }
 }
@@ -87,6 +192,6 @@ export default {
 .who img{width: .8rem;height: .8rem;border-radius: 50%;margin-right: .2rem;}
 .score{flex:1;text-align: center;color: #157FCA;font-size: .35rem;}
 .font1{font-size: 14px;}
-
+.nodata{width:100%;text-align:center;height:100px;line-height:100px;color: #999;font-size: 14px;}
 </style>
 

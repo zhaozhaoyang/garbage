@@ -12,8 +12,8 @@
                     {{item.adtime}}
                     </div>
                 </li> 
-                 <div class="" style="width:100%;text-align:center;" v-if="isLoading">
-                    <van-loading type="spinner" color="#1989fa" size="16"/>
+                 <div style="width:100%;text-align:center;height:30px;" v-if="isLoading">
+                    <van-loading type="spinner" color="#1989fa" size="16" v-if="loadtip=='加载中..'"/>
                     <span style="line-height:30px;color:#999;">{{loadtip}}</span>
                 </div>      
             </ul>
@@ -27,6 +27,7 @@
 import myheader  from './component/header.vue'
 import Scroll from './component/scroll.vue'
 import BScroll from 'better-scroll'
+import { Toast } from 'vant'
 export default {
     components:{myheader,Scroll},
     data() {
@@ -35,7 +36,7 @@ export default {
             // list:[{"title":"标题","content":"内容","adtime":"时间"},{"title":"标题","content":"内容","adtime":"时间"},{"title":"标题","content":"内容","adtime":"时间"},{"title":"标题","content":"内容","adtime":"时间"},{"title":"标题","content":"内容","adtime":"时间"},{"title":"标题","content":"内容","adtime":"时间"},{"title":"标题","content":"内容","adtime":"时间"},{"title":"标题","content":"内容","adtime":"时间"},{"title":"标题","content":"内容","adtime":"时间"},{"title":"标题","content":"内容","adtime":"时间"},{"title":"标题","content":"内容","adtime":"时间"}],
             uid:this.$store.state.uid || window.sessionStorage.getItem("uid"),
             page:1,
-            pageCount:10,
+            pageCount:15,
             totalPage:1,
 
             clicks: true,
@@ -56,25 +57,32 @@ export default {
             if(!this.isend){
                 return;
             }
+            Toast.loading({
+                mask: false,
+                message: '加载中...',
+                loadingType:"spinner",
+                duration:0
+            })
             this.isend = false;
             this.postRequest({"cmd":"messagelist",'uid':this.uid,nowPage:this.page,pageCount:this.pageCount})
             .then(res =>{
-                console.log(res)
+                // console.log(res)
                 this.isend = true;
                 if(res.data.dataList){
                     this.totalPage= res.data.totalPage                    
-                    this.list = [...this.list, ...res.data.list]
-                    this.page=this.page+1;  
+                    this.list = [...this.list, ...res.data.dataList]
+                    this.page=this.page+1;
                 }
             })
         },
         scrollToEnd(){
             this.isLoading=true;
-            if(this.totalPage<=this.page){
-                this.loadtip= '没有更多了...'
+            if(this.totalPage<this.page){
+                 Toast('没有更多数据了...')
                 setTimeout(()=>{
                     this.isLoading = false;
-                },2000)
+                    this.loadtip= '没有更多了...'
+                },1000)                
                 return;
             }
             this.getList();

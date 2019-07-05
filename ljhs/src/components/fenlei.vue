@@ -40,7 +40,7 @@ export default {
             list:[],
             totalPage:0 ,//总页数
             page: 1,
-            pageCount:10,
+            pageCount:15,
             // 是否加载完成
             isload: true
 		}
@@ -71,16 +71,17 @@ export default {
                 return;
             }
             if(this.page!=1 && this.page>this.totalPage){
-                Toast.toast('没有更多数据了..')
+                Toast('没有更多数据了.')
                 return;
             }
             Toast.loading({
                 mask: false,
                 message: '加载中...',
+                loadingType:"spinner",
                 duration:0
             })
             this.isload = false;
-            var data = {"cmd":"farmerlist","uid":this.uid,"nowPage":this.page}
+            var data = {"cmd":"farmerlist","uid":this.uid,"nowPage":this.page,pageCount:this.pageCount}
             this.postRequest(data)
             .then(res =>{
                 console.log(res)  

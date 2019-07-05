@@ -13,14 +13,17 @@
                 </van-radio-group>                
             </div>
             <div class="sec1">
-                <p class="font1">天气：</p>
-                <van-radio-group v-model="radiow" checked-color="#157FCA" @change="sel_weather">
+                <p class="font1">陪同人员：</p>
+                <textarea class="board0" name="" id="" cols="30" rows="10" placeholder="请输入陪同人员..." v-model="weather">
+
+                </textarea>
+                <!-- <van-radio-group v-model="radiow" checked-color="#157FCA" @change="sel_weather">
                     <div class="c_he">
                         <van-radio name="1" checked-color="#157FCA"><span class="font2">晴</span></van-radio>
                         <van-radio name="2" checked-color="#157FCA"><span class="font2">多云</span></van-radio>
                         <van-radio name="3" checked-color="#157FCA"><span class="font2">阴天</span></van-radio>
                     </div>
-                </van-radio-group>                
+                </van-radio-group>                 -->
             </div>
              <div class="sec1">
                 <p class="font1">存在问题：</p>
@@ -38,7 +41,7 @@
             </div>
             <div class="sec1">
                 <p class="font1">上次问题解决情况：</p>
-                <textarea class="board" name="" id="" cols="30" rows="10" placeholder="请输入...">
+                <textarea class="board" name="" id="" cols="30" rows="10" placeholder="请输入上次问题解决情况">
 
                 </textarea>
             </div>
@@ -225,8 +228,8 @@ export default {
                 }
             }
            this.question = qarr.toString()            
-            if(this.reachname ==''||this.weather==""||this.images.length=='0'){
-                Toast('河段名称、天气、上传图片不能为空！');	
+            if(this.reachname ==''||this.images.length=='0'){
+                Toast('河段名称、上传图片不能为空！');	
                 return;
             }
 
@@ -323,7 +326,8 @@ export default {
 .c_he{display: flex;flex-flow: row;border-bottom: 1px solid #C0C0C0;height: 1.1rem;line-height: 1.1rem;}
 .truble{min-width: 70px;}
 .van-tag{margin: .22rem;}
-.board{background:rgba(247,247,247,1);height: 4.053rem;width: 9.28rem;padding: .3rem;border-radius: 4px;}
+.board{background:rgba(247,247,247,1);height: 4.053rem;width: 9.28rem;padding: .3rem;border-radius: 4px;font-size: 14px;}
+.board0{background:rgba(247,247,247,1);height: 2rem;width: 9.28rem;padding: .3rem;border-radius: 4px;font-size: 14px;}
 ::-webkit-input-placeholder { 
     color:    #999;
 }

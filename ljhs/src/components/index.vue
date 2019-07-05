@@ -16,8 +16,8 @@
 			<div>
 			<div class="lunbo">	
 				<van-swipe :autoplay="3000" indicator-color="white" style="height:100%;">
-					<van-swipe-item v-for="(item,index) in bannerlist" :key="index">
-						<img :src="item.image" alt="" style="" class="lunboImg">		
+					<van-swipe-item v-for="(item,index) in bannerlist" :key="index" @touchstart="touchstart"  @touchend="touchend" >
+						<img :src="item.image" alt="" style="" class="lunboImg"  @click.stop="gowebview(item.contentUrl)">	
 					</van-swipe-item>
 				</van-swipe>
 			</div>
@@ -38,7 +38,7 @@
 				</ul>
 			</div>
 			<div class="logo">
-				<img src="@/assets/images/banner.jpg" alt="" >
+				<img src="@/assets/images/avator.jpg" alt="" >
 			</div>
 			</div>
 		</div>
@@ -77,7 +77,10 @@ export default {
 
 			showdg:false,
 			bgmask:"background: url(" + require("../assets/images/bg.png") + ");background-size:100% 100%;",
-			youke:""
+			youke:"",
+
+			oneX: "",
+      		twoX: ""
 		}
 	},
 	created(){
@@ -92,11 +95,29 @@ export default {
       	})
 	},
 	methods: {
+		touchstart(e){
+			this.oneX = e.changedTouches[0].clientX;
+		},
+		touchend(e){
+			this.twoX = e.changedTouches[0].clientX;
+		},
+		gowebview(url){
+			if (this.oneX == this.twoX) {
+				//当滑动距离等于0时触发点击事件
+				window.event ? (window.event.cancelBubble = true) : e.stopPropagation();
+				var url = 'http://122.114.48.61:8080/'+url
+				this.$router.push({
+					name:'webview',
+					params:{"src":url}			
+				})
+			}
+			
+		},
 		getBannerImg(){
 			this.postRequest({"cmd":"bannerlist"})
 			.then(res =>{
 				if(res.data.dataList){
-					console.log(res)
+					// console.log(res)
 					var bannerlist= res.data.dataList
 					for(let i of bannerlist){
 						i.image = 'http://122.114.48.61:8080/'+i.image 
@@ -112,7 +133,7 @@ export default {
 			this.postRequest({"cmd":"userInfo",'uid':this.uid})
 			.then(res =>{
 				this.dataObject  = res.data.dataObject
-				window.sessionStorage.setItem("userInfo",res.data.dataObject)
+				window.sessionStorage.setItem("userInfo",JSON.stringify(res.data.dataObject))
 				this.$store.commit("setuserInfo",res.data.dataObject);
 
 			})

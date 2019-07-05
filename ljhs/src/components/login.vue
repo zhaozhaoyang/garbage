@@ -4,7 +4,7 @@
 			<div @click="yklogo">游客登录</div>
 		</div>
 		<div class="logo">
-			<img src="../assets/images/touxiang.png" alt="">
+			<img src="../assets/images/logo.png" alt="">
 		</div>
 		<ul class="d2">
 			<li>
@@ -64,15 +64,15 @@
 </script>
 
 <style scoped="scoped">
-	.contain{width: 100%;box-sizing: border-box;height: 100vh;}
+	.contain{width: 100%;box-sizing: border-box;height: 100vh;background: #fff;}
 	.d1{width: 100%;display: flex;flex-flow: row;justify-content: flex-end;padding: .4rem .3rem 0;}
-	.d1 div{width: 1.97rem;height: .8rem;background: #eee;font-size: .35rem;line-height: .8rem;border-radius: .33rem;text-align: center;cursor: pointer;}
+	.d1 div{width: 1.97rem;height: 30px;background: #f9f9f9;font-size: .35rem;line-height: .8rem;border-radius: 15px;text-align: center;cursor: pointer;}
 	.logo{width: 100%;display: flex;justify-content: center;margin-top: 1rem;}
-	.logo img{width: 3rem;height: 3rem;}
+	.logo img{width: 3rem;height: 3rem;border-radius: 50%;}
 	.d2{width: 100%;margin-top: 1.5rem;}
-	.d2 li{width:8.34rem; height: 1.17rem;border-radius: .586rem;margin: .45rem auto 0;background: #fff;line-height: 1.17rem;padding-left: .5rem;box-sizing: border-box;display: flex;flex-flow: row;align-content: center;}
+	.d2 li{width:8.34rem; height: 1.17rem;border-radius: .586rem;margin: .45rem auto 0;background: #f9f9f9;line-height: 1.17rem;padding-left: .5rem;box-sizing: border-box;display: flex;flex-flow: row;align-content: center;}
 	.d2 span{font-size: .4rem;color: #333;}
-	.t1{width: 5rem;height: 99%;background: transparent;font-size: .374rem;margin-left: .5rem;}
+	.t1{width: 5.9rem;height: 99%;background: transparent;font-size: .374rem;margin-left: .5rem;}
 	/* .btn{display: block;width: 2.5rem;height: .63rem;line-height: .63rem;text-align: center;border-radius: .3rem;margin: 0 auto;margin-top: .9rem;font-size: .3rem;
 	background: linear-gradient(180deg,rgba(115, 200, 255, 1), rgba(49, 146, 255, 1));box-shadow: 0px 10px 24px 0px rgba(55, 151, 255, 0.3); color: #fff;} */
 	.btn{display: block;width: 4.56rem;height: 1.17rem;line-height: 1.17rem;text-align: center;border-radius:.586rem;margin: 0 auto;margin-top: .9rem;font-size: .43rem;

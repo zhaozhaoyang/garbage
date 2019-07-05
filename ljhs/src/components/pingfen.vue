@@ -14,7 +14,7 @@
             <div class="mstart">
                 <span>评分：</span>
                 <div>
-                    <van-rate v-model="score" color="#157FCA" size="16" @change="getscore"/>
+                    <van-rate v-model="score" color="#157FCA" size="16" @change="getscore" allow-half/>
                 </div>   
             </div> 
             <div class="liuyan">
@@ -79,20 +79,20 @@ export default {
                 Toast('评分不能为空！')
                 return;
             }
-            var obj = {"cmd":"subreScore",'uid':this.uid,fid:this.fuserInfo.fid,name:this.fuserInfo.name,vilname:this.fuserInfo.vilname,group:this.fuserInfo.group,phone:this.fuserInfo.phone,score:this.score,content:this.fuserInfo.content,images:this.fuserInfo.images}
+            var obj = {"cmd":"subreScore",'uid':this.uid,fid:this.fuserInfo.fid,name:this.fuserInfo.name,vilname:this.fuserInfo.vilname,group:this.fuserInfo.group,phone:this.fuserInfo.phone,score:this.score,content:this.fuserInfo.content,images:this.images}
+            console.log(JSON.stringify(obj))
             this.postRequest(obj)
 			.then(res =>{
                 Toast.success('提交成功');
                 setTimeout(()=>{
                     this.$router.push('/index')
-                },1000)
+                },1500)
 
 			})           
             
         },
-        getscore(num){
-            console.log(num)
-            this.score = num;
+        getscore(num){            
+            this.score = num*2;            
         },
         getImage(){
         // 拍照上传

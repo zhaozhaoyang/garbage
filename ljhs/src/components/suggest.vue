@@ -29,6 +29,10 @@ export default {
     },
     methods:{
         doIt(){
+            if(this.content.length==0||this.content.length>100){
+                Toast('建议内容不能为空')
+                return;
+            }
             var that = this
             this.postRequest({"cmd":"subFeedback",uid:this.uid,content:this.content})
             .then(res =>{
@@ -36,9 +40,7 @@ export default {
                 Toast.success({
                     message:'提交成功'
                 })
-                setTimeout(()=>{
-                    that.$router.push('/my')
-                },1000)
+                this.content = ''
                  
             })
             
@@ -50,6 +52,6 @@ export default {
 .c1{width: 100vw;height: 100vh;background: #fff;}
 .sec1 p{height: .99rem;line-height: .99rem;}
 .font1{font-size:0.427rem ;color: #111111;font-weight: bold;}
-.board{background:rgba(247,247,247,1);height: 4.053rem;width: 9.28rem;padding: .3rem;border-radius: 3px;}
+.board{background:rgba(247,247,247,1);height: 4.053rem;width: 9.28rem;padding: .3rem;border-radius: 3px;font-size: 14px;}
 .box{padding: .4rem;}
 </style>

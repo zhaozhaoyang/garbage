@@ -11,6 +11,18 @@ import { Toast } from 'vant';
 
 axios.defaults.timeout = 10000
 
+axios.interceptors.response.use(
+response => {
+	return response;
+},
+error => {
+	if(error.message.includes('timeout')){   // 判断请求异常信息中是否含有超时timeout字符串
+	console.log("错误回调", error);
+	return Promise.reject(error);          // reject这个错误信息
+	}
+	return Promise.reject(error);
+});
+
 export default{
     methods:{
         goto(data){
@@ -52,7 +64,8 @@ export default{
 					})
 					.catch(res => {
 						//失败
-						reject(res)
+						// reject(res)
+						Toast('请求超时！')
 					})
 			})
 		},
