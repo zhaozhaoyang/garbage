@@ -56,6 +56,13 @@
 				</div>
 			</div>
         </van-dialog>
+		<van-dialog v-model="dg_show" :showConfirmButton="false">
+            <div class="dg_content">
+                <img src="../assets/images/bell.jpg" style="height:57px;width:88px;">
+                <p>温馨提示：请去登录！</p>
+                <m-ybutton size="3" text="去登录！" @click="$router.push('login')"></m-ybutton>
+            </div>            
+        </van-dialog>
 	</div>
 </template>
 
@@ -76,6 +83,7 @@ export default {
 			dataObject:{},
 
 			showdg:false,
+			dg_show:false,//游客
 			bgmask:"background: url(" + require("../assets/images/bg.png") + ");background-size:100% 100%;",
 			youke:"",
 
@@ -84,7 +92,7 @@ export default {
 		}
 	},
 	created(){
-		this.youke = window.sessionStorage.getItem("youke");
+		this.youke = window.sessionStorage.getItem("youke");		
 		this.getBannerImg();
 		this.getUserInfo();
 	},
@@ -127,9 +135,6 @@ export default {
 			})
 		},
 		getUserInfo(){
-			if(this.youke == '3'){
-				return;
-			}
 			this.postRequest({"cmd":"userInfo",'uid':this.uid})
 			.then(res =>{
 				this.dataObject  = res.data.dataObject
@@ -139,9 +144,6 @@ export default {
 			})
 		},
 		gorank(){
-			if(this.youke == '3'){
-				return;
-			}
 			this.$router.push('/rank')
 		},
 		closemsk(){
@@ -155,15 +157,9 @@ export default {
 			this.$router.push({ name: 'identity', params: {}})
 		},
 		gotoflei(){
-			if(this.youke == '3'){
-				return;
-			}
 			this.$router.push('/fenlei')
 		},
 		gonews(){
-			if(this.youke == '3'){
-				return;
-			}
 			this.$router.push('/news')
 		},
 		goscan(){
@@ -301,4 +297,8 @@ export default {
 	.tipss{color: #666;font-size: 14px;position: relative;top: 3.5rem;}
 	.btn{display: block;width: 4.56rem;height: 1.17rem;line-height: 1.17rem;text-align: center;border-radius:.586rem;font-size: .43rem;
 	background:#157FCA; color: #fff;position: absolute;bottom: 20px;left: 1.56rem;}
+
+	.dg_content{display: flex;flex-flow: column;align-items: center;}
+	.dg_content img{margin-top: .3rem;}
+	.dg_content p{width: 80%;margin: .5rem 0;line-height: .5rem;color: #333;font-size: 15px;}
 </style>

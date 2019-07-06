@@ -26,9 +26,6 @@ error => {
 export default{
     methods:{
         goto(data){
-			if(window.sessionStorage.getItem("youke") == '3'){
-				return;
-			}
 			if(data == '0'){
 				this.$router.push({ name: 'index', params: {}})
 			}else if(data == '1'){

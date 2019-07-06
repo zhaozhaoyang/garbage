@@ -24,6 +24,33 @@ Vue.mixin(mixins)
 require('es6-promise').polyfill()
 Es6Promise.polyfill()
 
+router.beforeEach((to,form,next)=>{
+	if(window.sessionStorage.getItem("youke")=='3' && to.name != 'index' && to.name != 'login'){
+		
+		const toast = Toast.loading({
+			duration: 0,       // 持续展示 toast
+			forbidClick: true, // 禁用背景点击
+			loadingType: 'spinner',
+			message: '返回登陆'
+		  });
+		  
+		  let second = 3;
+		  const timer = setInterval(() => {
+			second--;
+			if (second) {
+			  toast.message = `倒计时 ${second} 秒`;
+			} else {
+			  clearInterval(timer);
+			  Toast.clear();
+			  next('/login')
+			}
+		  }, 1000);
+	}else{
+		next()
+	}
+
+})
+
 new Vue({
 	el: '#app',
 	router,
