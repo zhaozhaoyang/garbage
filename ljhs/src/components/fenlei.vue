@@ -63,7 +63,21 @@ export default {
         }.bind(this);
     },
     mounted(){
-        
+        var first = null
+        var that = this
+        mui.back = function() {
+            if (!first) {
+                that.$router.push('/index')
+                first = new Date().getTime() 
+                setTimeout(function() { 
+                    first = null
+                }, 1000)
+            } else {
+                if (new Date().getTime() - first < 1000) { 
+                    plus.runtime.quit() 
+                }
+            }
+        }
     },
     methods:{
         getList(){
@@ -93,6 +107,9 @@ export default {
                 }
             })
         }
+    },
+    destroyed(){
+        window.onscroll="";
     }
 }
 </script>
@@ -129,7 +146,7 @@ export default {
 .b2{
     width: 77%; 
 }
-.tm{font-size: 12px;letter-spacing: 2px;text-align: right;}
+.tm{font-size: 12px;text-align: right;color: #999;}
 .bb2,.b3{
     display: flex;flex-flow: row;justify-content: space-between;
 }

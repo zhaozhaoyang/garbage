@@ -51,6 +51,7 @@ router.beforeEach((to,form,next)=>{
 
 })
 
+
 new Vue({
 	el: '#app',
 	router,

@@ -33,6 +33,23 @@ export default {
     created(){
 
     },
+    mounted(){
+        var first = null
+        var that = this
+        mui.back = function() {
+            if (!first) {
+                that.$router.push('/index')
+                first = new Date().getTime() 
+                setTimeout(function() { 
+                    first = null
+                }, 1000)
+            } else {
+                if (new Date().getTime() - first < 1000) { 
+                    plus.runtime.quit() 
+                }
+            }
+        }
+    },
     methods:{
         next(){
             if(this.identity1 && this.identity2){

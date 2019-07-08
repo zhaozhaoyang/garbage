@@ -33,6 +33,23 @@ export default {
             },1000)
             
         }
+    },
+    mounted(){
+        var first = null
+        var that = this
+        mui.back = function() {
+            if (!first) {
+                that.$router.push('/my')
+                first = new Date().getTime() 
+                setTimeout(function() { 
+                    first = null
+                }, 1000)
+            } else {
+                if (new Date().getTime() - first < 1000) { 
+                    plus.runtime.quit() 
+                }
+            }
+        }
     }
 }
 </script>

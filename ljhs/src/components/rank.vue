@@ -116,32 +116,41 @@ export default {
             list:[],
             totalPage:1,
             isend:true,
-            pullup: {
-                type: Boolean,
-                default: false
-            },
+            pullup:true,
 		}
     },
     created(){
         this.getList()
     },
     mounted(){
+        var first = null
+		mui.back = function() {
+			if (!first) {
+				first = new Date().getTime() 
+				mui.toast('再按一次退出应用')
+				setTimeout(function() { 
+					first = null
+				}, 1000)
+			} else {
+				if (new Date().getTime() - first < 1000) { 
+					plus.runtime.quit() 
+				}
+			}
+		}
         setTimeout(() => {
             this._initScroll()
         }, 20)
-         this.$nextTick(() => {
+        this.$nextTick(() => {
             this.scroll = new Bscroll(this.$refs.wrapper, {})
         })
     },
     methods:{
-        _initScroll() {           
+        _initScroll() {   
             if (this.pullup) {
             this.scroll.on('scrollEnd', () => {
-                if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
-                    if(this.totalPage<this.page){
-                        Toast('没有更多数据了....')             
-                        return;
-                    }
+                
+                if (this.scroll.y <= (this.scroll.maxScrollY + 50) && this.scroll.y !=0) {
+                    console.log(this.scroll.y + '***'+this.scroll.maxScrollY)
                     this.getList()
                 }
             })
@@ -151,6 +160,10 @@ export default {
             if(num == '1'){
                 this.page = 1;
                 this.list=[]
+            }
+            if(this.page!=1 && this.page>this.totalPage){
+                Toast('没有更多数据了....')
+                return;
             }
             if(!this.isend){
                 return;

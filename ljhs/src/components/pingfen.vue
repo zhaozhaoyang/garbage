@@ -73,6 +73,23 @@ export default {
     created(){
         this.fuserInfo = JSON.parse(localStorage.getItem('dataObject'))
     },
+    mounted(){
+        var first = null
+        var that = this
+        mui.back = function() {
+            if (!first) {
+                that.$router.push('/saoysao')
+                first = new Date().getTime() 
+                setTimeout(function() { 
+                    first = null
+                }, 1000)
+            } else {
+                if (new Date().getTime() - first < 1000) { 
+                    plus.runtime.quit() 
+                }
+            }
+        }
+    },
     methods:{
         doIt(){
             if(this.score == 0){

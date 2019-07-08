@@ -29,7 +29,7 @@
                 <p class="font1">存在问题：</p>
                 <div class="truble bd">
                    <div style="width:80%;">
-                        <van-tag :plain='item.show' type="primary" round color="#157FCA" @click="choose(index)" v-for="(item,index) in questionList" :key="index">{{item.questioncontent}}</van-tag>
+                        <van-tag :plain='item.show' type="primary" size="large" round color="#157FCA" @click="choose(index)" v-for="(item,index) in questionList" :key="index">{{item.questioncontent}}</van-tag>
                     </div>
                 </div>
             </div>
@@ -122,6 +122,23 @@ export default {
         })
         // 问题列表
         this.questions()
+    },
+    mounted(){
+        var first = null
+        var that = this
+        mui.back = function() {
+            if (!first) {
+                that.$router.push('/identity')
+                first = new Date().getTime() 
+                setTimeout(function() { 
+                    first = null
+                }, 1000)
+            } else {
+                if (new Date().getTime() - first < 1000) { 
+                    plus.runtime.quit() 
+                }
+            }
+        }
     },
     methods:{
         questions(){

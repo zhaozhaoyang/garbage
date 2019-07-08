@@ -97,6 +97,20 @@ export default {
 		this.getUserInfo();
 	},
 	mounted(){
+		var first = null
+		mui.back = function() {
+			if (!first) {
+				first = new Date().getTime() 
+				mui.toast('再按一次退出应用')
+				setTimeout(function() { 
+					first = null
+				}, 1000)
+			} else {
+				if (new Date().getTime() - first < 1000) { 
+					plus.runtime.quit() 
+				}
+			}
+		}
 		// window.addEventListener('scroll', this.handleScroll, true);  // 监听（绑定）滚轮滚动事件
 		this.$nextTick(() => {
       	  this.scroll = new Bscroll(this.$refs.wrapper, {click: true})
@@ -195,12 +209,12 @@ export default {
           }
           result = result.replace(/\n/g, '')
           that.codeUrl = result
-        //   alert(result)
+          console.log(result)
 		  that.closeScan();
 		//   this.showdg = false //扫码失败代码
 		
 		that.postRequest({"cmd":"scan",fid:result,uid:that.uid})		
-        .then(res =>{		
+        .then(res =>{	
 			localStorage.setItem('dataObject',JSON.stringify(res.data.dataObject))	
 			that.$router.push({
 				name:'saoysao',

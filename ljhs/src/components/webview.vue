@@ -14,8 +14,39 @@ export default {
         }
     },
     created(){
-        this.src = this.$route.params.src
+        this.src = this.$route.params.src;
+    },
+    mounted(){
+          var first = null
+            var that = this
+            mui.back = function() {
+                if (!first) {
+                    that.$router.push('/index')
+                    first = new Date().getTime() 
+                    setTimeout(function() { 
+                        first = null
+                    }, 1000)
+                } else {
+                    if (new Date().getTime() - first < 1000) { 
+                        plus.runtime.quit() 
+                    }
+                }
+            }
     }
+    // ,
+    // mounted(){
+    //     document.addEventListener('plusready',function () {  
+    //         plus.key.addEventListener("backbutton",function(){
+    //             console.log(JSON.stringify(router))
+    //             router.back(-1)
+    //         });
+    //     },false);  
+    // },
+    // destroyed(){
+    //     plus.key.addEventListener("backbutton",function(){
+            
+    //     });
+    // }
 }
 </script>
 <style scope>

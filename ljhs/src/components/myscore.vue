@@ -43,6 +43,21 @@ export default {
         this.getList()
     },
     mounted(){
+        var first = null
+        var that = this
+        mui.back = function() {
+            if (!first) {
+                that.$router.push('/my')
+                first = new Date().getTime() 
+                setTimeout(function() { 
+                    first = null
+                }, 1000)
+            } else {
+                if (new Date().getTime() - first < 1000) { 
+                    plus.runtime.quit() 
+                }
+            }
+        }
         window.onscroll = function() {
         if (!this.isload) {
             return;
@@ -104,7 +119,7 @@ export default {
 .b2{
     width: 77%; 
 }
-.tm{font-size: 12px;letter-spacing: 2px;text-align: right;color: #999;}
+.tm{font-size: 12px;text-align: right;color: #999;}
 .bb2,.b3{
     display: flex;flex-flow: row;justify-content: space-between;
 }

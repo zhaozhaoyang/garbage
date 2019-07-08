@@ -50,7 +50,21 @@ export default {
         this.getList()
     },
     mounted(){
-        
+        var first = null
+        var that = this
+        mui.back = function() {
+            if (!first) {
+                that.$router.push('/index')
+                first = new Date().getTime() 
+                setTimeout(function() { 
+                    first = null
+                }, 1000)
+            } else {
+                if (new Date().getTime() - first < 1000) { 
+                    plus.runtime.quit() 
+                }
+            }
+        }
     },
     methods:{
         getList(){
@@ -101,7 +115,7 @@ export default {
 .list li{height: 1.8rem;width: 100%;border-bottom: 1px solid #fafafa;box-sizing: border-box;}
 .lf{display: flex;flex-flow: column;}
 .sp1{margin-bottom: .3rem;}
-.rt{letter-spacing: 1px;align-self: flex-start;margin-top: 15px;}
+.rt{color: #999;align-self: flex-start;margin-top: 15px;}
 
 .wrapper_box{
     position: absolute;

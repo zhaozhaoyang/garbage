@@ -27,6 +27,23 @@ export default {
     created(){
         
     },
+    mounted(){
+        var first = null
+        var that = this
+        mui.back = function() {
+            if (!first) {
+                that.$router.push('/set')
+                first = new Date().getTime() 
+                setTimeout(function() { 
+                    first = null
+                }, 1000)
+            } else {
+                if (new Date().getTime() - first < 1000) { 
+                    plus.runtime.quit() 
+                }
+            }
+        }
+    },
     methods:{
         doIt(){
             if(this.content.length==0||this.content.length>100){
