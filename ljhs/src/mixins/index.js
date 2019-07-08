@@ -55,7 +55,11 @@ export default{
 						if(res.data.result == '0'){
 							resolve(res)
 						}else{
-							Toast(res.data.resultNote);
+							if(res.data.resultNote == '扫描失败，二维码数据有误'){
+								resolve(res)
+							}else{
+								Toast(res.data.resultNote);
+							}							
 						}
 						
 					})

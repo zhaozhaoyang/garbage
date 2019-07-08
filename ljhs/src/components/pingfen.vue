@@ -96,7 +96,7 @@ export default {
                 Toast('评分不能为空！')
                 return;
             }
-            var obj = {"cmd":"subreScore",'uid':this.uid,fid:this.fuserInfo.fid,name:this.fuserInfo.name,vilname:this.fuserInfo.vilname,group:this.fuserInfo.group,phone:this.fuserInfo.phone,score:this.score,content:this.fuserInfo.content,images:this.images}
+            var obj = {"cmd":"subreScore",'uid':this.uid,fid:this.fuserInfo.fid,name:this.fuserInfo.name,vilname:this.fuserInfo.vilname,group:this.fuserInfo.group,phone:this.fuserInfo.phone,score:this.score*2,content:this.fuserInfo.content,images:this.images}
             console.log(JSON.stringify(obj))
             this.postRequest(obj)
 			.then(res =>{
@@ -109,7 +109,7 @@ export default {
             
         },
         getscore(num){            
-            this.score = num*2;            
+            this.score = num;          
         },
         getImage(){
         // 拍照上传

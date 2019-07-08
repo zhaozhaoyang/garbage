@@ -79,7 +79,7 @@ export default {
 			codeUrl: '',
 			showsao:false,
 			actnum:0,
-			bannerlist:[],  //轮播图
+			bannerlist:JSON.parse(window.localStorage.getItem('bannerlist')),  //轮播图
 			dataObject:{},
 
 			showdg:false,
@@ -144,6 +144,7 @@ export default {
 					for(let i of bannerlist){
 						i.image = 'http://122.114.48.61:8080/'+i.image 
 					}
+					window.localStorage.setItem('bannerlist',JSON.stringify(bannerlist))
 					this.bannerlist = bannerlist
 				}
 			})
@@ -151,6 +152,7 @@ export default {
 		getUserInfo(){
 			this.postRequest({"cmd":"userInfo",'uid':this.uid})
 			.then(res =>{
+				console.log(res)
 				this.dataObject  = res.data.dataObject
 				window.sessionStorage.setItem("userInfo",JSON.stringify(res.data.dataObject))
 				this.$store.commit("setuserInfo",res.data.dataObject);
@@ -214,12 +216,17 @@ export default {
 		//   this.showdg = false //扫码失败代码
 		
 		that.postRequest({"cmd":"scan",fid:result,uid:that.uid})		
-        .then(res =>{	
-			localStorage.setItem('dataObject',JSON.stringify(res.data.dataObject))	
-			that.$router.push({
-				name:'saoysao',
-				params:{dataObject:JSON.stringify(res.data.dataObject)}
-			})	
+        .then(res =>{
+			if(res.data.resultNote == '扫描失败，二维码数据有误'){
+				that.showdg = true //扫码失败代码
+			}else{
+				localStorage.setItem('dataObject',JSON.stringify(res.data.dataObject))	
+				that.$router.push({
+					name:'saoysao',
+					params:{dataObject:JSON.stringify(res.data.dataObject)}
+				})	
+			}
+			
         })
 
 		}

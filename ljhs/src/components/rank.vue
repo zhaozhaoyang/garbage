@@ -178,6 +178,7 @@ export default {
             var params = {"cmd":"scoreSort",'uid':this.uid,type:this.type,nowPage:this.page,pageCount:this.pageCount}
             this.postRequest(params)
             .then(res =>{
+                console.log(res)
                 this.isend = true;
                 if(res.data.dataList){                    
                     this.totalPage= res.data.totalPage                    
