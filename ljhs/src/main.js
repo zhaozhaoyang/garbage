@@ -25,8 +25,7 @@ require('es6-promise').polyfill()
 Es6Promise.polyfill()
 
 router.beforeEach((to,form,next)=>{
-	if(window.sessionStorage.getItem("youke")=='3' && to.name != 'index' && to.name != 'login'){
-		
+	if(window.sessionStorage.getItem("youke")=='3' && to.name != 'index' && to.name != 'login'){		
 		const toast = Toast.loading({
 			duration: 0,       // 持续展示 toast
 			forbidClick: true, // 禁用背景点击
@@ -45,6 +44,10 @@ router.beforeEach((to,form,next)=>{
 			  next('/login')
 			}
 		  }, 1000);
+	}else if(window.sessionStorage.getItem("youke") !='3' &&  to.name=='rank' && JSON.parse(window.sessionStorage.getItem("userInfo")).identity !='0'){
+		
+			Toast.fail('暂无权限！');
+			return;
 	}else{
 		next()
 	}

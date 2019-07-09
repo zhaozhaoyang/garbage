@@ -33,7 +33,10 @@ function postRequest(url, data = {}, method = 'post') {
 			})
 	})
 }
-
-export default {
-	postRequest: postRequest
+function jjj(){
+	console.log(1111)
 }
+function ppp(){
+	console.log(222)
+}
+export default {postRequest,jjj,ppp}
