@@ -5,7 +5,7 @@
             <ul class="list">
                 <li v-for="(item,index) in list" :key="index">
                     <div class="b1">
-                        <img src="@/assets/images/touxiang.png" alt="">
+                        <img :src="item.icon" alt="">
                     </div>
                     <div class="b2">
                         <div class="tm">{{item.adtime}}</div>

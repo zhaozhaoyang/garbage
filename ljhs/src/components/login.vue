@@ -4,7 +4,7 @@
       <div @click="yklogo">游客登录</div>
     </div>
     <div class="logo">
-      <img src="../assets/images/logo.png" alt />
+      <img src="../assets/images/mren.jpg" alt />
     </div>
     <ul class="d2">
       <li>

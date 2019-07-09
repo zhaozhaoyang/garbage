@@ -4,7 +4,7 @@
         <div class="avator">
             <div class="upImg">
                  <van-uploader :after-read="editFace">
-                    <img class="face" :src="dataObject.icon" alt="">
+                    <img class="face" :src="dataObject.icon" alt="" :onerror="src">
                 </van-uploader>
             </div>           
             
@@ -36,7 +36,7 @@ export default {
             nobder:false,
             actnum:2,
             dataObject:"",
-            src:require('@/assets/images/touxiang.png')
+            src:'this.src="' + require('@/assets/images/mren.jpg') + '"'
         }
     },
     created(){

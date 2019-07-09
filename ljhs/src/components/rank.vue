@@ -15,7 +15,8 @@
                             <span v-if="index>2" class="font1">{{index}}</span>
                         </div>                       
                         <div class="who">
-                            <img src="@/assets/images/touxiang.png" alt="">
+                            <!-- <img src="@/assets/images/touxiang.png" alt=""> -->
+                            <img :src="i.icon" alt="">
                             <span>{{i.name}}</span>
                         </div>
                         <span class="score">
@@ -37,7 +38,7 @@
                             <span v-if="index>2" class="font1">{{index}}</span>
                         </div>                       
                         <div class="who">
-                            <img src="@/assets/images/touxiang.png" alt="">
+                              <img :src="i.icon" alt="">
                             <span>{{i.name}}</span>
                         </div>
                         <span class="score">
@@ -59,7 +60,7 @@
                             <span v-if="index>2" class="font1">{{index}}</span>
                         </div>                       
                         <div class="who">
-                            <img src="@/assets/images/touxiang.png" alt="">
+                            <img :src="i.icon" alt="">
                             <span>{{i.name}}</span>
                         </div>
                         <span class="score">
@@ -81,7 +82,7 @@
                             <span v-if="index>2" class="font1">{{index}}</span>
                         </div>                       
                         <div class="who">
-                            <img src="@/assets/images/touxiang.png" alt="">
+                            <img :src="i.icon" alt="">
                             <span>{{i.name}}</span>
                         </div>
                         <span class="score">
