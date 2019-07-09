@@ -6,10 +6,10 @@
                 <li class="flex" v-for="(item,index) in list" :key="index">
                     <div class="lf">
                         <span class="font1 sp1">{{item.title}}</span>
-                        <span class="font2">{{item.content}}</span>
+                        <span class="font2">{{item.adtime}}</span>
                     </div>
                     <div class="rt color9 font2">
-                    {{item.adtime}}
+                        <span class="font3">{{item.content}}</span>                    
                     </div>
                 </li> 
                  <div style="width:100%;text-align:center;height:30px;" v-if="isLoading">
@@ -106,16 +106,17 @@ export default {
 </script>
 <style scoped>
 .nodata{width:100%;text-align:center;height:100px;line-height:100px;color: #999;font-size: 14px;}
-.flex{display: flex;flex-flow: row;align-items: center;justify-content: space-between;}
+.flex{display: flex;flex-flow: column;padding: 20px 0;}
 .font1{font-size: .43rem;font-weight: bold;color:#111; }
 .font2{font-size: .32rem;color:#999; }
+.font3{font-size: .32rem;color:#999;line-height: 20px;}
 .color9{color: #999;}
 .c1{width: 100%;height: 100vh;background: #fff;}
-.list{padding: .4rem .3rem;}
-.list li{height: 1.8rem;width: 100%;border-bottom: 1px solid #fafafa;box-sizing: border-box;}
-.lf{display: flex;flex-flow: column;}
+.list{padding: 0 .3rem;}
+.list li{width: 100%;border-bottom: 1px solid #fafafa;box-sizing: border-box;}
+.lf{display: flex;flex-flow: row;justify-content: space-between;}
 .sp1{margin-bottom: .3rem;}
-.rt{color: #999;align-self: flex-start;margin-top: 15px;}
+.rt{color: #999;align-self: flex-start;}
 
 .wrapper_box{
     position: absolute;
