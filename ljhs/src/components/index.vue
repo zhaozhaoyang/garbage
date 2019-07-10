@@ -32,13 +32,13 @@
                 alt
                 style
                 class="lunboImg"
-                @click.stop="gowebview(item.contentUrl)"
+                @click.stop="gowebview(item.contentUrl,item.title)"
               />
             </van-swipe-item>
           </van-swipe>
         </div>
         <div>
-          <ul class="bars">
+          <ul class="bars animated fadeInLeft">
             <li @click="gotoflei">
               <img src="@/assets/images/nav1.jpg" alt />
               <span>垃圾分类</span>
@@ -54,7 +54,7 @@
           </ul>
         </div>
         <div class="logo">
-          <img src="@/assets/images/avator.jpg" alt />
+          <img src="@/assets/images/logo.png" alt />
         </div>
       </div>
     </div>
@@ -73,6 +73,7 @@
 
 <script>
 import btmbar from "./component/btmbar.vue";
+import 'vue2-animate/dist/vue2-animate.min.css';
 import { Icon, Swipe, SwipeItem, Lazyload, Toast } from "vant";
 import Bscroll from "better-scroll";
 let scan = null;
@@ -130,21 +131,21 @@ export default {
     touchend(e) {
       this.twoX = e.changedTouches[0].clientX;
     },
-    gowebview(url) {
+    gowebview(url,title) {
       if (this.oneX == this.twoX) {
         //当滑动距离等于0时触发点击事件
         window.event ? (window.event.cancelBubble = true) : e.stopPropagation();
         var url = "http://122.114.48.61:8080/" + url;
         this.$router.push({
           name: "webview",
-          params: { src: url }
+          params: { src: url,title:title}
         });
       }
     },
     getBannerImg() {
       this.postRequest({ cmd: "bannerlist" }).then(res => {
         if (res.data.dataList) {
-          // console.log(res)
+          console.log(res)
           var bannerlist = res.data.dataList;
           for (let i of bannerlist) {
             i.image = "http://122.114.48.61:8080/" + i.image;
@@ -155,11 +156,11 @@ export default {
       });
     },
     getUserInfo() {
-      if (this.youke == "3") {
+      if (this.youke == "3") {//游客
         return;
       }
       this.postRequest({ cmd: "userInfo", uid: this.uid }).then(res => {
-        console.log(res);
+        // console.log(res);
         this.dataObject = res.data.dataObject;
         window.sessionStorage.setItem(
           "userInfo",
@@ -186,6 +187,10 @@ export default {
       this.$router.push({ name: "identity", params: {} });
     },
     gotoflei() {
+      if (this.dataObject.identity != "0") {
+        Toast.fail("暂无权限！");
+        return;
+      }
       this.$router.push("/fenlei");
     },
     gonews() {
@@ -365,12 +370,11 @@ export default {
 .logo {
   width: 100%;
   text-align: center;
-  margin-top: 30px;
+  margin-top: 50px;
 }
 .logo img {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
+  width: 125px;
+  height: 120px;
 }
 .van-dialog {
   background: transparent;

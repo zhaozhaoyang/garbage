@@ -5,7 +5,7 @@
             <ul class="list">
                 <li v-for="(item,index) in list" :key="index">
                     <div class="b1">
-                        <img :src="item.icon" alt="">
+                        <img :src="item.icon" alt="" :onerror="src">
                     </div>
                     <div class="b2">
                         <div class="tm">{{item.adtime}}</div>
@@ -42,7 +42,8 @@ export default {
             page: 1,
             pageCount:15,
             // 是否加载完成
-            isload: true
+            isload: true,
+            src:'this.src="' + require('@/assets/images/mren.jpg') + '"'
 		}
     },
     created(){

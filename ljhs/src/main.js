@@ -33,7 +33,7 @@ router.beforeEach((to,form,next)=>{
 			message: '返回登陆'
 		  });
 		  
-		  let second = 3;
+		  let second = 1;
 		  const timer = setInterval(() => {
 			second--;
 			if (second) {

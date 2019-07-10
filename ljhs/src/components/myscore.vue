@@ -21,7 +21,7 @@
             </li>
         </ul>
         <p class="nodata" v-if="list.length==0">
-            暂无数据...
+            {{nodata}}
         </p>
     </div>
 </template>
@@ -38,10 +38,16 @@ export default {
             pageCount:15,
             isload:true,
             totalPage:0 ,//总页数
+            nodata:"暂无数据..."
 		}
     },
     created(){
-        this.getList()
+        console.log(JSON.parse(window.sessionStorage.getItem("userInfo")).identity)
+        if(JSON.parse(window.sessionStorage.getItem("userInfo")).identity == "0"){
+            this.getList()
+        }else{
+            this.nodata= '没有权限哦！'
+        }
     },
     mounted(){
         var first = null

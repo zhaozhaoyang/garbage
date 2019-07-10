@@ -4,24 +4,25 @@
       <div @click="yklogo">游客登录</div>
     </div>
     <div class="logo">
-      <img src="../assets/images/mren.jpg" alt />
+      <img src="../assets/images/logo.png" alt />
     </div>
     <ul class="d2">
-      <li>
+      <li class="animated fadeInLeft  delay-3s">
         <span>账号：</span>
         <input type="text" class="t1" placeholder="输入账号" v-model="name" />
       </li>
-      <li>
+      <li class="animated fadeInLeft delay-4s">
         <span>密码：</span>
         <input type="password" class="t1" placeholder="输入密码" v-model="password" />
       </li>
     </ul>
-    <div class="btn" @click="logo">确认登录</div>
+    <div class="btn" @click="logo" >确认登录</div>
   </div>
 </template>
 
 <script>
 import { Toast, Button, Notify } from "vant";
+import 'vue2-animate/dist/vue2-animate.min.css';
 export default {
   data() {
     return {
@@ -30,7 +31,9 @@ export default {
       token: ""
     };
   },
-  mounted() {},
+  mounted() {
+
+  },
   components: {
     Toast
   },

@@ -12,6 +12,15 @@
       </li>
     </ul>
     <m-ybutton @click="next" text="知道了" size="3"></m-ybutton>
+    <!-- <van-popup v-model="show"> -->
+    <van-dialog v-model="show" :showConfirmButton="false">
+      <div class="dg_content">
+        <img src="../assets/images/bell.jpg" style="height:57px;width:88px;" />
+        <p>请选择正确身份类型！</p>
+        <m-ybutton size="3" text="确定" @click="close_dg"></m-ybutton>
+      </div>
+    </van-dialog>
+    <!-- </van-popup> -->
   </div>
 </template>
 <script>
@@ -27,7 +36,8 @@ export default {
       src2: require("../assets/images/nok.png"),
       identy:
         this.$store.state.userInfo || window.sessionStorage.getItem("userInfo"),
-      idFlag: ""
+      idFlag: "",
+      show:false
     };
   },
   created() {},
@@ -54,14 +64,16 @@ export default {
         Toast("请选择身份");
         return;
       }
-
-      console.log(this.identy.identity);
       if (this.idFlag != this.identy.identity) {
-        Toast.fail("请选择正确身份！");
+        // Toast.fail("请选择正确身份！");
+        this.show = true;
         return;
       }
 
       this.$router.push("/xunhe2");
+    },
+    close_dg(){
+      this.show = false
     },
     huan(num) {
       if (num == "1") {
@@ -124,5 +136,21 @@ export default {
   position: absolute;
   right: 0.88rem;
   top: 0.5rem;
+}
+.dg_content {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+.dg_content img {
+  margin-top: 0.4rem;
+}
+.dg_content p {
+  width: 80%;
+  margin: 0.5rem 0;
+  line-height: 0.5rem;
+  color: #333;
+  font-size: 15px;
+  text-align: center;
 }
 </style>
