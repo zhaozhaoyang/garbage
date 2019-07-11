@@ -1,7 +1,7 @@
 <template>
     <div class="bar">
         <!-- <van-tabbar v-model="currentIndex" @change="change" :fixed='fixed' active-color="#157FCA" :safe-area-inset-bottom='ipx'> -->
-        <van-tabbar v-model="currentIndex" @change="change" :fixed='fixed' active-color="#157FCA">
+        <van-tabbar v-model="currentIndex" @change="change" :fixed='fixed' active-color="#157FCA" :safe-area-inset-bottom='ipx'>
             <van-tabbar-item>
                 <span class="f1">首页</span>
                 <img
@@ -49,16 +49,32 @@ export default {
                 normal: require('../../assets/images/me.jpg'),
                 active: require('../../assets/images/active_me.jpg')
             },
-            ipx:true
+            ipx:false
         }
     },
     props:['actived'],
+    created(){
+        this.ipx = this.getIsIphonex()
+    },
     methods:{
         change(){
             this.$emit('goIndex',this.currentIndex)
+        },
+        getIsIphonex () {
+            var u = navigator.userAgent;
+            var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+            if (isIOS) {
+                if (screen.height == 812 && screen.width == 375) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
         }
     }
 }
 </script>
 <style scoped>
+.van-tabbar--safe-area-inset-bottom{box-sizing:content-box;padding-bottom: 20px;}
 </style>
