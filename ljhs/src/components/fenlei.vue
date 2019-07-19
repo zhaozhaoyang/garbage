@@ -56,11 +56,9 @@ export default {
         var clientHeight=document.compatMode == "CSS1Compat"?document.documentElement.clientHeight:document.body.clientHeight;
         var scrollHeight=document.body.scrollHeight|| document.documentElement.scrollHeight;
         // console.log(scrollTop +'----'+clientHeight+'---'+scrollHeight)
-        if (
-            scrollTop + (clientHeight - 0) >=scrollHeight - 0
-        ) {
+        if (scrollTop + (clientHeight - 0) >=scrollHeight - 0) {
             this.getList();
-        }
+         }
         }.bind(this);
     },
     mounted(){

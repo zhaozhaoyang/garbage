@@ -56,12 +56,12 @@
         </div>
       </div>
       <div class="sec1">
-        <p class="font1">其他问题描述：</p>
-        <textarea class="board" name id cols="30" rows="10" placeholder="请描述你的问题"></textarea>
+        <p class="font1">发现问题：</p>
+        <textarea class="board" name id cols="30" rows="10" placeholder="请描述你的问题..."></textarea>
       </div>
       <div class="sec1">
-        <p class="font1">上次问题解决情况：</p>
-        <textarea class="board" name id cols="30" rows="10" placeholder="请输入上次问题解决情况"></textarea>
+        <p class="font1">问题整改情况：</p>
+        <textarea class="board" name id cols="30" rows="10" placeholder="请输入问题整改情况..."></textarea>
       </div>
       <div class="sec1">
         <p class="font1">上传图片：</p>
@@ -89,7 +89,8 @@
     <van-dialog v-model="dg_show" :showConfirmButton="showConfirmButton">
       <div class="dg_content">
         <img src="../assets/images/bell.jpg" style="height:57px;width:88px;" />
-        <p>温馨提示：街道级河长每月巡河不少于2次 村级河长每月巡河不少于4次</p>
+        <div style="margin: 15px 0 0 0;">温馨提示</div>
+        <p>街道级河长每月巡河不少于2次 村级河长每月巡河不少于4次</p>
         <m-ybutton size="3" text="开始巡河" @click="close_dg"></m-ybutton>
       </div>
     </van-dialog>

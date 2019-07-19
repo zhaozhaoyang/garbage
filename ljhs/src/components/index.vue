@@ -1,13 +1,13 @@
 <template>
   <div class="box">
     <div class="header">
-      <van-icon name="scan" size="25px" @click="goscan" />
+      <van-icon name="scan" size="30px" @click="goscan" />
       <div>垃圾回收APP</div>
       <!-- <van-icon name="bulb-o" size="26px" @click="gonews"/> -->
       <van-icon
         class-prefix="iconfont icon-iconfontzhizuobiaozhun023110"
         name="extra"
-        size="22px"
+        size="26px"
         @click="gonews"
       />
     </div>
@@ -210,7 +210,8 @@ export default {
     startRecognize() {
       let that = this;
       if (!window.plus) return;
-      scan = new plus.barcode.Barcode("bcid");
+      var styles = {frameColor: "#22ac38",scanbarColor: "#22ac38"};
+      scan = new plus.barcode.Barcode("bcid",'',styles);
       scan.onmarked = onmarked;
 
       function onmarked(type, result, file) {
@@ -318,8 +319,8 @@ export default {
   margin-top: 0.2rem;
 }
 .bars li img {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%;
 }
 #bcid {

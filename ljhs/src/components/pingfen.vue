@@ -14,7 +14,14 @@
       <div class="mstart">
         <span>评分：</span>
         <div>
-          <van-rate v-model="score" color="#157FCA" size="16" @change="getscore" allow-half />
+          <!-- <van-rate v-model="score" color="#157FCA" size="16" @change="getscore"/> -->
+          <van-radio-group v-model="score" @change="getscore">
+            <div style="display:flex;flex-flow:row;justify-content: space-around;width: 200px;">
+              <van-radio name="0" checked-color="#157FCA">0分</van-radio>
+              <van-radio name="1" checked-color="#157FCA">1分</van-radio>
+              <van-radio name="2" checked-color="#157FCA">2分</van-radio>
+            </div>            
+          </van-radio-group>
         </div>
       </div>
       <div class="liuyan">
@@ -69,7 +76,7 @@ export default {
     return {
       uid: this.$store.state.uid || window.sessionStorage.getItem("uid"),
       stype: "垃圾回收",
-      score: 0,
+      score: -1,
       fileList: [],
       fuserInfo: {},
 
@@ -104,8 +111,8 @@ export default {
   },
   methods: {
     doIt() {
-      if (this.score == 0 || this.content == "" || this.images.length == 0) {
-        Toast("评分、评分理由和照片不能为空！");
+      if (this.score == '-1') {
+        Toast("评分不能为空！");
         return;
       }
       var obj = {
@@ -116,7 +123,7 @@ export default {
         vilname: this.fuserInfo.vilname,
         group: this.fuserInfo.group,
         phone: this.fuserInfo.phone,
-        score: this.score * 2,
+        score: this.score,
         content: this.content,
         images: this.images
       };
